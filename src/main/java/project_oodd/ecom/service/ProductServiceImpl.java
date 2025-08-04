@@ -47,44 +47,44 @@ public class ProductServiceImpl implements ProductService {
 				.orElseThrow(() -> new AppException("Product not found with this Id", 404)));
 	}
 
-	public ProductDTO createProduct(ProductDTO dto) {
+	public ProductDTO createProduct(ProductDTO data) {
 		Product product = new Product();
-		product.setProductCode(dto.getProductCode());
-		product.setProductName(dto.getProductName());
-		product.setPrice(dto.getPrice());
-		product.setStock(dto.getStock());
-		product.setImg(dto.getImg());
+		product.setProductCode(data.getProductCode());
+		product.setProductName(data.getProductName());
+		product.setPrice(data.getPrice());
+		product.setStock(data.getStock());
+		product.setImg(data.getImg());
 
-		if (dto.getColors() != null) {
-			Set<Color> colors = dto.getColors().stream()
-					.map(colorCode -> colorRepository.findByColorCodeIgnoreCase(colorCode)
+		if (data.getColors() != null) {
+			Set<Color> colors = data.getColors().stream()
+					.map(color -> colorRepository.findByColorCodeIgnoreCase(color)
 							.orElseThrow(() -> new AppException("Please, create this type of color first!", 404)))
 					.collect(Collectors.toSet());
 			product.setColors(colors);
 		}
 
-		if (dto.getSizes() != null) {
-			Set<Size> sizes = dto.getSizes().stream()
-					.map(value -> sizeRepository.findByValueIgnoreCase(value).orElseThrow(
+		if (data.getSizes() != null) {
+			Set<Size> sizes = data.getSizes().stream()
+					.map(size -> sizeRepository.findByValueIgnoreCase(size).orElseThrow(
 							() -> new AppException("Size invalid! Please create this type of size first!", 404)))
 					.collect(Collectors.toSet());
 			product.setSizes(sizes);
 		}
 
-		if (dto.getCategory() != null) {
-			Category cat = categoryRepository.findByCategoryCodeIgnoreCase(dto.getCategory())
+		if (data.getCategory() != null) {
+			Category cat = categoryRepository.findByCategoryCodeIgnoreCase(data.getCategory())
 					.orElseThrow(() -> new AppException("Please, create this type of category first!", 404));
 			product.setCategory(cat);
 		}
 
-		if (dto.getSubCategory() != null) {
-			SubCategory subCat = subCategoryRepository.findBySubCategoryCodeIgnoreCase(dto.getSubCategory())
+		if (data.getSubCategory() != null) {
+			SubCategory subCat = subCategoryRepository.findBySubCategoryCodeIgnoreCase(data.getSubCategory())
 					.orElseThrow(() -> new AppException("Please, create this type of sub-category first!", 404));
 			product.setSubCategory(subCat);
 		}
 
-		productRepository.save(product);
-		return dto;
+		
+		return convertToDTO(productRepository.save(product));
 	}
 
 //	private String generateColorCode(String color) {
@@ -98,38 +98,38 @@ public class ProductServiceImpl implements ProductService {
 //		return res;
 //	}
 
-	public ProductDTO updateProduct(String id, ProductDTO dto) {
+	public ProductDTO updateProduct(String id, ProductDTO data) {
 
 		Product p = productRepository.findByProductCodeIgnoreCase(id)
 				.orElseThrow(() -> new AppException("Product not found with this Id", 404));
 
-		if (dto.getProductCode() != null)
-			p.setProductCode(dto.getProductCode());
-		if (dto.getProductName() != null)
-			p.setProductName(dto.getProductName());
-		if (dto.getPrice() != null)
-			p.setPrice(dto.getPrice());
-		if (dto.getStock() != null)
-			p.setStock(dto.getStock());
-		if (dto.getImg() != null)
-			p.setImg(dto.getImg());
-		if (dto.getColors() != null)
-			p.setColors(dto.getColors().stream()
-					.map(code -> colorRepository.findByColorCodeIgnoreCase(code)
+		if (data.getProductCode() != null)
+			p.setProductCode(data.getProductCode());
+		if (data.getProductName() != null)
+			p.setProductName(data.getProductName());
+		if (data.getPrice() != null)
+			p.setPrice(data.getPrice());
+		if (data.getStock() != null)
+			p.setStock(data.getStock());
+		if (data.getImg() != null)
+			p.setImg(data.getImg());
+		if (data.getColors() != null)
+			p.setColors(data.getColors().stream()
+					.map(color -> colorRepository.findByColorCodeIgnoreCase(color)
 							.orElseThrow(() -> new AppException("Please, create this type of color first!", 404)))
 					.collect(Collectors.toSet()));
 
-		if (dto.getSizes() != null)
-			p.setSizes(dto.getSizes().stream()
-					.map(value -> sizeRepository.findByValueIgnoreCase(value).orElseThrow(
+		if (data.getSizes() != null)
+			p.setSizes(data.getSizes().stream()
+					.map(size -> sizeRepository.findByValueIgnoreCase(size).orElseThrow(
 							() -> new AppException("Size invalid! Please create this type of size first!", 404)))
 					.collect(Collectors.toSet()));
 
-		if (dto.getCategory() != null)
-			p.setCategory(categoryRepository.findByCategoryCodeIgnoreCase(dto.getCategory())
+		if (data.getCategory() != null)
+			p.setCategory(categoryRepository.findByCategoryCodeIgnoreCase(data.getCategory())
 					.orElseThrow(() -> new AppException("Please, create this type of category first!", 404)));
-		if (dto.getSubCategory() != null)
-			p.setSubCategory(subCategoryRepository.findBySubCategoryCodeIgnoreCase(dto.getSubCategory())
+		if (data.getSubCategory() != null)
+			p.setSubCategory(subCategoryRepository.findBySubCategoryCodeIgnoreCase(data.getSubCategory())
 					.orElseThrow(() -> new AppException("Please, create this type of sub-category first!", 404)));
 
 		return convertToDTO(productRepository.save(p));
@@ -140,7 +140,7 @@ public class ProductServiceImpl implements ProductService {
 				.orElseThrow(() -> new AppException("Product not found with this Id", 404));
 		productRepository.delete(product);
 	}
-
+	
 	public ProductDTO convertToDTO(Product product) {
 		ProductDTO dto = new ProductDTO();
 		dto.setProductCode(product.getProductCode());

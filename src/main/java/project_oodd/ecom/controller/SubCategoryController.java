@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import project_oodd.ecom.dto.SubCategoryDTO;
+import project_oodd.ecom.model.SubCategory;
 import project_oodd.ecom.service.SubCategoryService;
 import project_oodd.ecom.util.ApiResponse;
 
@@ -37,10 +38,10 @@ public class SubCategoryController {
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> getSubCategoryById(@PathVariable String id) {
+	@GetMapping("/{code}")
+	public ResponseEntity<ApiResponse<Map<String, Object>>> getSubCategoryById(@PathVariable String code) {
 
-		SubCategoryDTO subcategory = subCategoryService.getSubCategoryById(id);
+		SubCategoryDTO subcategory = subCategoryService.getSubCategoryById(code);
 		Map<String, Object> data = Map.of("data", subcategory);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -48,28 +49,28 @@ public class SubCategoryController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<Map<String, Object>>> createcategory(@RequestBody SubCategoryDTO dto) {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> createcategory(@RequestBody SubCategory body) {
 
-		SubCategoryDTO subCategory = subCategoryService.createSubCategory(dto);
+		SubCategoryDTO subCategory = subCategoryService.createSubCategory(body);
 		Map<String, Object> data = Map.of("data", subCategory);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
-	@PatchMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> updatecategory(@PathVariable String id,
-			@RequestBody SubCategoryDTO dto) {
-		SubCategoryDTO category = subCategoryService.updateSubCategory(id, dto);
+	@PatchMapping("/{code}")
+	public ResponseEntity<ApiResponse<Map<String, Object>>> updatecategory(@PathVariable String code,
+			@RequestBody SubCategory body) {
+		SubCategoryDTO category = subCategoryService.updateSubCategory(code, body);
 		Map<String, Object> data = Map.of("data", category);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
 		return ResponseEntity.ok(response);
 	}
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
-		subCategoryService.deleteSubCategory(id);
+	@DeleteMapping("/{code}")
+	public ResponseEntity<Void> deleteProduct(@PathVariable String code) {
+		subCategoryService.deleteSubCategory(code);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 

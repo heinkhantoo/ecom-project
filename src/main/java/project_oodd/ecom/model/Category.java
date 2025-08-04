@@ -25,10 +25,6 @@ public class Category {
 	public void onCreate() {
 		this.createdDate = LocalDateTime.now();
 		this.modifiedDate = LocalDateTime.now();
-		if (categoryCode != null)
-			this.categoryCode = "";
-		if (categoryName != null)
-			this.categoryName = "";
 	}
 
 	@PreUpdate

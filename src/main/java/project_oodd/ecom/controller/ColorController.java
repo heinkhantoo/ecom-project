@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import project_oodd.ecom.dto.ColorDTO;
+import project_oodd.ecom.model.Color;
 import project_oodd.ecom.service.ColorService;
 import project_oodd.ecom.util.ApiResponse;
 
@@ -39,9 +40,9 @@ public class ColorController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<Map<String, Object>>> createColor(@RequestBody ColorDTO dto) {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> createColor(@RequestBody Color body) {
 
-		ColorDTO color = colorService.createColor(dto);
+		ColorDTO color = colorService.createColor(body);
 		Map<String, Object> data = Map.of("data", color);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -50,8 +51,8 @@ public class ColorController {
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<ApiResponse<Map<String, Object>>> updateColor(@PathVariable String id,
-			@RequestBody ColorDTO dto) {
-		ColorDTO color = colorService.updateColor(id, dto);
+			@RequestBody Color body) {
+		ColorDTO color = colorService.updateColor(id, body);
 		Map<String, Object> data = Map.of("data", color);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);

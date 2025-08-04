@@ -28,20 +28,20 @@ public class ColorServiceImpl implements ColorService {
         return color;
     }
 
-    public ColorDTO createColor(ColorDTO dto) {
+    public ColorDTO createColor(Color data) {
     	Color color = new Color();
-        color.setColorCode(dto.getColorCode());
-        color.setColorDescription(dto.getColorDescription());
+        color.setColorCode(data.getColorCode());
+        color.setColorDescription(data.getColorDescription());
         return convertToDTO(colorRepository.save(color));
     }
 
-    public ColorDTO updateColor(String id, ColorDTO dto) {
+    public ColorDTO updateColor(String id, Color data) {
 
         Color color = colorRepository.findByColorCodeIgnoreCase(id)
                 .orElseThrow(() -> new AppException("Color not found with this id", 404));
         
-        if (dto.getColorCode() != null) color.setColorCode(dto.getColorCode());
-        if (dto.getColorDescription() != null) color.setColorDescription(dto.getColorDescription());
+        if (data.getColorCode() != null) color.setColorCode(data.getColorCode());
+        if (data.getColorDescription() != null) color.setColorDescription(data.getColorDescription());
 
         return convertToDTO(colorRepository.save(color));
     }

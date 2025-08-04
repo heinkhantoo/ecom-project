@@ -40,9 +40,9 @@ public class ProductController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<Map<String, Object>>> createProduct(@RequestBody ProductDTO dto) {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> createProduct(@RequestBody ProductDTO body) {
 
-		ProductDTO product = productService.createProduct(dto);
+		ProductDTO product = productService.createProduct(body);
 		Map<String, Object> data = Map.of("data", product);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -51,8 +51,8 @@ public class ProductController {
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<ApiResponse<Map<String, Object>>> updateProduct(@PathVariable String id,
-			@RequestBody ProductDTO dto) {
-		ProductDTO product = productService.updateProduct(id, dto);
+			@RequestBody ProductDTO body) {
+		ProductDTO product = productService.updateProduct(id, body);
 		Map<String, Object> data = Map.of("data", product);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import project_oodd.ecom.dto.CategoryDTO;
+import project_oodd.ecom.model.Category;
 import project_oodd.ecom.service.CategoryService;
 import project_oodd.ecom.util.ApiResponse;
 
@@ -47,9 +48,9 @@ public class CategoryController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<Map<String, Object>>> createcategory(@RequestBody CategoryDTO dto) {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> createcategory(@RequestBody Category body) {
 
-		CategoryDTO category = categoryService.createCategory(dto);
+		CategoryDTO category = categoryService.createCategory(body);
 		Map<String, Object> data = Map.of("data", category);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -58,8 +59,8 @@ public class CategoryController {
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<ApiResponse<Map<String, Object>>> updatecategory(@PathVariable String id,
-			@RequestBody CategoryDTO dto) {
-		CategoryDTO category = categoryService.updateCategory(id, dto);
+			@RequestBody Category body) {
+		CategoryDTO category = categoryService.updateCategory(id, body);
 		Map<String, Object> data = Map.of("data", category);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);

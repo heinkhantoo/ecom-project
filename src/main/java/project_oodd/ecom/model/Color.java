@@ -29,10 +29,6 @@ public class Color {
 	public void onCreate() {
 		this.createdDate = LocalDateTime.now();
 		this.modifiedDate = LocalDateTime.now();
-		if (colorCode == null)
-			this.colorCode = "";
-		if (colorDescription == null)
-			this.colorDescription = "";
 	}
 
 	@PreUpdate

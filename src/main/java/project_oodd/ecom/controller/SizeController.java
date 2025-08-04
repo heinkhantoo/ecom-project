@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import project_oodd.ecom.dto.SizeDTO;
+import project_oodd.ecom.model.Size;
 import project_oodd.ecom.service.SizeService;
 import project_oodd.ecom.util.ApiResponse;
 
@@ -46,9 +47,9 @@ public class SizeController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<Map<String, Object>>> createColor(@RequestBody SizeDTO dto) {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> createColor(@RequestBody Size body) {
 
-		SizeDTO color = sizeService.createSize(dto);
+		SizeDTO color = sizeService.createSize(body);
 		Map<String, Object> data = Map.of("data", color);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -57,8 +58,8 @@ public class SizeController {
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<ApiResponse<Map<String, Object>>> updateColor(@PathVariable String id,
-			@RequestBody SizeDTO dto) {
-		SizeDTO color = sizeService.updateSize(id, dto);
+			@RequestBody Size body) {
+		SizeDTO color = sizeService.updateSize(id, body);
 		Map<String, Object> data = Map.of("data", color);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
