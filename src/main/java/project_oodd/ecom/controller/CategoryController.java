@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,8 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import project_oodd.ecom.dto.CategoryDTO;
 import project_oodd.ecom.model.Category;
+import project_oodd.ecom.model.User;
 import project_oodd.ecom.service.CategoryService;
 import project_oodd.ecom.util.ApiResponse;
+import project_oodd.ecom.util.Role;
+import project_oodd.ecom.util.RoleRestriction;
 
 
 @RestController
@@ -28,7 +32,10 @@ public class CategoryController {
 	private CategoryService categoryService;
 
 	@GetMapping
-	public ResponseEntity<ApiResponse<Map<String, Object>>> getAll() {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> getAll(@AuthenticationPrincipal User user) {
+		
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		
 		List<CategoryDTO> category = categoryService.getCategory();
 		Map<String, Object> data = Map.of("data", category);
 
@@ -38,8 +45,10 @@ public class CategoryController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> getCategoryById(@PathVariable String id) {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> getCategoryById(@AuthenticationPrincipal User user, @PathVariable String id) {
 
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		
 		CategoryDTO category = categoryService.getCategoryById(id);
 		Map<String, Object> data = Map.of("data", category);
 
@@ -48,8 +57,10 @@ public class CategoryController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<Map<String, Object>>> createcategory(@RequestBody Category body) {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> createcategory(@AuthenticationPrincipal User user, @RequestBody Category body) {
 
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		
 		CategoryDTO category = categoryService.createCategory(body);
 		Map<String, Object> data = Map.of("data", category);
 
@@ -58,8 +69,11 @@ public class CategoryController {
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> updatecategory(@PathVariable String id,
+	public ResponseEntity<ApiResponse<Map<String, Object>>> updatecategory(@AuthenticationPrincipal User user, @PathVariable String id,
 			@RequestBody Category body) {
+		
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		
 		CategoryDTO category = categoryService.updateCategory(id, body);
 		Map<String, Object> data = Map.of("data", category);
 
@@ -68,7 +82,10 @@ public class CategoryController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
+	public ResponseEntity<Void> deleteProduct(@AuthenticationPrincipal User user, @PathVariable String id) {
+		
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		
 		categoryService.deleteCategory(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}

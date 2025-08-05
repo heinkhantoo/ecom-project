@@ -1,6 +1,7 @@
 package project_oodd.ecom.model;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -15,8 +16,8 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private long uid;
-
-	@Column(length = 50, nullable = false, unique = true)
+	
+	@Column(name = "code", length = 36)
 	private String userCode;
 
 	@Column(length = 100, nullable = false)
@@ -29,7 +30,7 @@ public class User {
 	private String phno;
 
 	@Column(nullable = false)
-	@Size(min = 8, message = "Password must be at least 8 characters!")
+	@Size(min = 8, message = "Password must be at least 8 characters long!")
 	private String password;
 
 	@Transient
@@ -46,11 +47,17 @@ public class User {
 	public boolean passwordMatch() {
 		return password != null && password.equals(confirmPassword);
 	}
+	
+	public boolean correctPassword(String userPassword, String password) {
+		return new Encoder().passwordEncoder(12).matches(userPassword, password);
+	}
 
 	@PrePersist
 	public void onCreate() {
+		this.userCode = UUID.randomUUID().toString().replace("-", "");
 		if (phno == null)
 			this.phno = "";
+		if (role == null) this.role = Role.USER;
 		this.confirmPassword = "";
 		this.active = true;
 		this.password = new Encoder().passwordEncoder(12).encode(password);

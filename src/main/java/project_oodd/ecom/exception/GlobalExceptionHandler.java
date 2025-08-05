@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
 			String rootMsg = rootCause.getMessage().toLowerCase();
 
 			if (rootMsg.contains("unique key")) {
-				message = "Duplicate entry. The code must be unique. The value you're trying to save already exists.";
+				message = "Duplicate entry. The value you're trying to save already exists.";
 			} else if (rootMsg.contains("reference")) {
 				message = "Request failed due to related data. Please remove references before deleting.";
 			} else if (rootMsg.contains("null")) {

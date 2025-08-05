@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService {
 
 	public UserDTO createUser(User data) {
 		User user = new User();
-		user.setUserCode(data.getUserCode());
 		user.setEmail(data.getEmail());
 		user.setName(data.getName());
 		user.setPhno(data.getPhno());
@@ -45,8 +44,6 @@ public class UserServiceImpl implements UserService {
 	public UserDTO updateUser(String code, User data) {
 		User user = userRepository.findByUserCodeIgnoreCase(code)
 				.orElseThrow(() -> new AppException("User doesn't exist!", 404));
-		if (data.getUserCode() != null)
-			user.setUserCode(data.getUserCode());
 		if (data.getEmail() != null)
 			user.setEmail(data.getEmail());
 		if (data.getName() != null)

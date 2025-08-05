@@ -6,11 +6,16 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import project_oodd.ecom.service.ProductService;
 import project_oodd.ecom.util.ApiResponse;
-import project_oodd.ecom.dto.ProductDTO;
+import project_oodd.ecom.util.Role;
+import project_oodd.ecom.util.RoleRestriction;
+import project_oodd.ecom.dto.ProductReqDTO;
+import project_oodd.ecom.dto.ProductResDTO;
+import project_oodd.ecom.model.User;
 
 @RestController
 @RequestMapping("/api/products")
@@ -21,7 +26,8 @@ public class ProductController {
 
 	@GetMapping
 	public ResponseEntity<ApiResponse<Map<String, Object>>> getAll() {
-		List<ProductDTO> products = productService.getProducts();
+		
+		List<ProductResDTO> products = productService.getProducts();
 		Map<String, Object> data = Map.of("data", products);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", products.size(), data);
@@ -32,7 +38,7 @@ public class ProductController {
 	@GetMapping("/{id}")
 	public ResponseEntity<ApiResponse<Map<String, Object>>> getProductById(@PathVariable String id) {
 
-		ProductDTO product = productService.getProductById(id);
+		ProductResDTO product = productService.getProductById(id);
 		Map<String, Object> data = Map.of("data", product);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -40,9 +46,12 @@ public class ProductController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<Map<String, Object>>> createProduct(@RequestBody ProductDTO body) {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> createProduct(@AuthenticationPrincipal User user,
+			@RequestBody ProductReqDTO body) {
 
-		ProductDTO product = productService.createProduct(body);
+		RoleRestriction.restrictTo(user, Role.ADMIN,Role.MANAGER,Role.ASSISTANT);
+
+		ProductResDTO product = productService.createProduct(body);
 		Map<String, Object> data = Map.of("data", product);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -50,9 +59,12 @@ public class ProductController {
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> updateProduct(@PathVariable String id,
-			@RequestBody ProductDTO body) {
-		ProductDTO product = productService.updateProduct(id, body);
+	public ResponseEntity<ApiResponse<Map<String, Object>>> updateProduct(@AuthenticationPrincipal User user,
+			@PathVariable String id, @RequestBody ProductReqDTO body) {
+		
+		RoleRestriction.restrictTo(user, Role.ADMIN,Role.MANAGER,Role.ASSISTANT);
+		
+		ProductResDTO product = productService.updateProduct(id, body);
 		Map<String, Object> data = Map.of("data", product);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -60,7 +72,10 @@ public class ProductController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
+	public ResponseEntity<Void> deleteProduct(@AuthenticationPrincipal User user, @PathVariable String id) {
+		
+		RoleRestriction.restrictTo(user, Role.ADMIN,Role.MANAGER,Role.ASSISTANT);
+		
 		productService.deleteProduct(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}

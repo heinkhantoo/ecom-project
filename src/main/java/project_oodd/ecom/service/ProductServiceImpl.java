@@ -1,6 +1,7 @@
 package project_oodd.ecom.service;
 
-import project_oodd.ecom.dto.ProductDTO;
+import project_oodd.ecom.dto.ProductReqDTO;
+import project_oodd.ecom.dto.ProductResDTO;
 import project_oodd.ecom.exception.AppException;
 import project_oodd.ecom.model.Category;
 import project_oodd.ecom.model.Color;
@@ -38,16 +39,16 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private SubCategoryRepository subCategoryRepository;
 
-	public List<ProductDTO> getProducts() {
+	public List<ProductResDTO> getProducts() {
 		return convertToDTO(productRepository.findAll());
 	}
 
-	public ProductDTO getProductById(String id) {
+	public ProductResDTO getProductById(String id) {
 		return convertToDTO(productRepository.findByProductCodeIgnoreCase(id)
 				.orElseThrow(() -> new AppException("Product not found with this Id", 404)));
 	}
 
-	public ProductDTO createProduct(ProductDTO data) {
+	public ProductResDTO createProduct(ProductReqDTO data) {
 		Product product = new Product();
 		product.setProductCode(data.getProductCode());
 		product.setProductName(data.getProductName());
@@ -71,6 +72,7 @@ public class ProductServiceImpl implements ProductService {
 			product.setSizes(sizes);
 		}
 
+		System.out.println(data.getCategory());
 		if (data.getCategory() != null) {
 			Category cat = categoryRepository.findByCategoryCodeIgnoreCase(data.getCategory())
 					.orElseThrow(() -> new AppException("Please, create this type of category first!", 404));
@@ -98,7 +100,7 @@ public class ProductServiceImpl implements ProductService {
 //		return res;
 //	}
 
-	public ProductDTO updateProduct(String id, ProductDTO data) {
+	public ProductResDTO updateProduct(String id, ProductReqDTO data) {
 
 		Product p = productRepository.findByProductCodeIgnoreCase(id)
 				.orElseThrow(() -> new AppException("Product not found with this Id", 404));
@@ -141,8 +143,8 @@ public class ProductServiceImpl implements ProductService {
 		productRepository.delete(product);
 	}
 	
-	public ProductDTO convertToDTO(Product product) {
-		ProductDTO dto = new ProductDTO();
+	public ProductResDTO convertToDTO(Product product) {
+		ProductResDTO dto = new ProductResDTO();
 		dto.setProductCode(product.getProductCode());
 		dto.setProductName(product.getProductName());
 		if (product.getPrice() != null) {
@@ -170,7 +172,7 @@ public class ProductServiceImpl implements ProductService {
 		return dto;
 	}
 
-	public List<ProductDTO> convertToDTO(List<Product> products) {
+	public List<ProductResDTO> convertToDTO(List<Product> products) {
 		if (products == null || products.isEmpty()) {
 			return Collections.emptyList();
 		}
