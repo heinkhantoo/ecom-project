@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import project_oodd.ecom.dto.SubCategoryDTO;
 import project_oodd.ecom.model.SubCategory;
 import project_oodd.ecom.model.User;
+import project_oodd.ecom.security.RoleRestriction;
 import project_oodd.ecom.service.SubCategoryService;
 import project_oodd.ecom.util.ApiResponse;
 import project_oodd.ecom.util.Role;
-import project_oodd.ecom.util.RoleRestriction;
 
 @RestController
 @RequestMapping("/api/subcategory")

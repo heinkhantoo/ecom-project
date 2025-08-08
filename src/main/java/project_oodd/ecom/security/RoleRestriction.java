@@ -1,4 +1,4 @@
-package project_oodd.ecom.util;
+package project_oodd.ecom.security;
 
 import java.util.Arrays;
 import java.util.List;
@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import project_oodd.ecom.exception.AppException;
 import project_oodd.ecom.model.User;
+import project_oodd.ecom.util.Role;
 
 @Component
 public class RoleRestriction {

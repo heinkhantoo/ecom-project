@@ -3,15 +3,26 @@ package project_oodd.ecom.exception;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import project_oodd.ecom.util.ApiResponse;
 import java.util.Map;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
+	
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<?> handleEmptyOrMalformedBody(HttpMessageNotReadableException ex) {
+        Map<String, Object> errorResponse = Map.of(
+                "status", "fail",
+                "message", "Request body is missing or invalid"
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<ApiResponse<Map<String, Object>>> handleDataIntegrityViolation(

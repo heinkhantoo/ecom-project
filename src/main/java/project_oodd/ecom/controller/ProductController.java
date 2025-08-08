@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import project_oodd.ecom.service.ProductService;
 import project_oodd.ecom.util.ApiResponse;
 import project_oodd.ecom.util.Role;
-import project_oodd.ecom.util.RoleRestriction;
 import project_oodd.ecom.dto.ProductReqDTO;
 import project_oodd.ecom.dto.ProductResDTO;
 import project_oodd.ecom.model.User;
+import project_oodd.ecom.security.RoleRestriction;
 
 @RestController
 @RequestMapping("/api/products")

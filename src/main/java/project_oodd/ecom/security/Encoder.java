@@ -1,4 +1,4 @@
-package project_oodd.ecom.util;
+package project_oodd.ecom.security;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;

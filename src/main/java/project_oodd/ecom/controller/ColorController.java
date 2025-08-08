@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import project_oodd.ecom.dto.ColorDTO;
 import project_oodd.ecom.model.Color;
 import project_oodd.ecom.model.User;
+import project_oodd.ecom.security.RoleRestriction;
 import project_oodd.ecom.service.ColorService;
 import project_oodd.ecom.util.ApiResponse;
 import project_oodd.ecom.util.Role;
-import project_oodd.ecom.util.RoleRestriction;
 
 @RestController
 @RequestMapping("/api/colors")

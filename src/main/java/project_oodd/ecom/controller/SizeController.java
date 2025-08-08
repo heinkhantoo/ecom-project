@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import project_oodd.ecom.dto.SizeDTO;
 import project_oodd.ecom.model.Size;
 import project_oodd.ecom.model.User;
+import project_oodd.ecom.security.RoleRestriction;
 import project_oodd.ecom.service.SizeService;
 import project_oodd.ecom.util.ApiResponse;
 import project_oodd.ecom.util.Role;
-import project_oodd.ecom.util.RoleRestriction;
 
 @RestController
 @RequestMapping("/api/sizes")

@@ -1,4 +1,4 @@
-package project_oodd.ecom.util;
+package project_oodd.ecom.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,14 +12,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class FilterRegistration {
 	@Autowired
     private Authentication auth;
+	
+	@Autowired
+	private CustomAuthenticationEntryPoint customAuthEntryPoint;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/users/login", "/api/users/signup").permitAll()
+                .requestMatchers("/api/users/login", "/api/users/signup", "/api/users/logout").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                 .anyRequest().authenticated()
-            ).csrf(csrf -> csrf.disable())
+            )
+        .exceptionHandling(ex -> ex.authenticationEntryPoint(customAuthEntryPoint))
+        .csrf(csrf -> csrf.disable())
             .addFilterBefore(auth, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

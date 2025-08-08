@@ -13,10 +13,10 @@ import jakarta.validation.Valid;
 import project_oodd.ecom.dto.UserDTO;
 import project_oodd.ecom.exception.AppException;
 import project_oodd.ecom.model.User;
+import project_oodd.ecom.security.RoleRestriction;
 import project_oodd.ecom.service.UserService;
 import project_oodd.ecom.util.ApiResponse;
 import project_oodd.ecom.util.Role;
-import project_oodd.ecom.util.RoleRestriction;
 
 @RestController
 @RequestMapping("/api/users")

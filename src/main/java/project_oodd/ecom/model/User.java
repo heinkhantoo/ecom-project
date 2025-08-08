@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import project_oodd.ecom.util.Encoder;
+import project_oodd.ecom.security.Encoder;
 import project_oodd.ecom.util.Role;
 
 @Entity
