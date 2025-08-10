@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -16,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import project_oodd.ecom.dto.SubCategoryDTO;
+import project_oodd.ecom.model.SubCategory;
+import project_oodd.ecom.model.User;
+import project_oodd.ecom.security.RoleRestriction;
 import project_oodd.ecom.service.SubCategoryService;
 import project_oodd.ecom.util.ApiResponse;
-
-
+import project_oodd.ecom.util.Role;
 
 @RestController
 @RequestMapping("/api/subcategory")
@@ -28,7 +31,10 @@ public class SubCategoryController {
 	private SubCategoryService subCategoryService;
 
 	@GetMapping
-	public ResponseEntity<ApiResponse<Map<String, Object>>> getAll() {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> getAll(@AuthenticationPrincipal User user) {
+		
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		
 		List<SubCategoryDTO> subcategory = subCategoryService.getSubCategory();
 		Map<String, Object> data = Map.of("data", subcategory);
 
@@ -38,8 +44,11 @@ public class SubCategoryController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> getSubCategoryById(@PathVariable String id) {
-
+	public ResponseEntity<ApiResponse<Map<String, Object>>> getSubCategoryById(@AuthenticationPrincipal User user,
+			@PathVariable String id) {
+		
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		
 		SubCategoryDTO subcategory = subCategoryService.getSubCategoryById(id);
 		Map<String, Object> data = Map.of("data", subcategory);
 
@@ -48,9 +57,12 @@ public class SubCategoryController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<Map<String, Object>>> createcategory(@RequestBody SubCategoryDTO dto) {
-
-		SubCategoryDTO subCategory = subCategoryService.createSubCategory(dto);
+	public ResponseEntity<ApiResponse<Map<String, Object>>> createcategory(@AuthenticationPrincipal User user,
+			@RequestBody SubCategory body) {
+		
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		
+		SubCategoryDTO subCategory = subCategoryService.createSubCategory(body);
 		Map<String, Object> data = Map.of("data", subCategory);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -58,9 +70,12 @@ public class SubCategoryController {
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> updatecategory(@PathVariable String id,
-			@RequestBody SubCategoryDTO dto) {
-		SubCategoryDTO category = subCategoryService.updateSubCategory(id, dto);
+	public ResponseEntity<ApiResponse<Map<String, Object>>> updatecategory(@AuthenticationPrincipal User user,
+			@PathVariable String id, @RequestBody SubCategory body) {
+		
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		
+		SubCategoryDTO category = subCategoryService.updateSubCategory(id, body);
 		Map<String, Object> data = Map.of("data", category);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -68,7 +83,9 @@ public class SubCategoryController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
+	public ResponseEntity<Void> deleteProduct(@AuthenticationPrincipal User user, @PathVariable String id) {
+
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
 		subCategoryService.deleteSubCategory(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}

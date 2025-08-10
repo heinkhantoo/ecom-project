@@ -25,10 +25,6 @@ public class SubCategory {
 	public void onCreate() {
 		this.createdDate = LocalDateTime.now();
 		this.modifiedDate = LocalDateTime.now();
-		if (subCategoryCode != null)
-			this.subCategoryCode = "";
-		if (subCategoryName != null)
-			this.subCategoryName = "";
 	}
 
 	@PreUpdate

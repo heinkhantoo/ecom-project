@@ -22,23 +22,23 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 		return convertToDTO(subCategoryRespository.findAll());
 	}
 
-	public SubCategoryDTO getSubCategoryById(String id) {
-		SubCategoryDTO cat = convertToDTO(subCategoryRespository.findBySubCategoryCodeIgnoreCase(id)
+	public SubCategoryDTO getSubCategoryById(String code) {
+		SubCategoryDTO cat = convertToDTO(subCategoryRespository.findBySubCategoryCodeIgnoreCase(code)
 				.orElseThrow(() -> new AppException("SubCategory not found with this id", 404)));
 
 		return cat;
 	}
 
-	public SubCategoryDTO createSubCategory(SubCategoryDTO dto) {
+	public SubCategoryDTO createSubCategory(SubCategory data) {
 		SubCategory cat = new SubCategory();
-		cat.setSubCategoryName(dto.getSubCategoryName());
-		cat.setSubCategoryCode(dto.getSubCategoryCode());
+		cat.setSubCategoryName(data.getSubCategoryName());
+		cat.setSubCategoryCode(data.getSubCategoryCode());
 		return convertToDTO(subCategoryRespository.save(cat));
 	}
 
-	public SubCategoryDTO updateSubCategory(String id, SubCategoryDTO dto) {
+	public SubCategoryDTO updateSubCategory(String code, SubCategory dto) {
 
-		SubCategory cat = subCategoryRespository.findBySubCategoryCodeIgnoreCase(id)
+		SubCategory cat = subCategoryRespository.findBySubCategoryCodeIgnoreCase(code)
 				.orElseThrow(() -> new AppException("SubCategory not found with this id", 404));
 
 		if (dto.getSubCategoryCode() != null)
@@ -49,8 +49,8 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 		return convertToDTO(subCategoryRespository.save(cat));
 	}
 
-	public void deleteSubCategory(String id) {
-		SubCategory cat = subCategoryRespository.findBySubCategoryCodeIgnoreCase(id)
+	public void deleteSubCategory(String code) {
+		SubCategory cat = subCategoryRespository.findBySubCategoryCodeIgnoreCase(code)
 				.orElseThrow(() -> new AppException("SubCategory not found with this id", 404));
 		subCategoryRespository.delete(cat);
 	}

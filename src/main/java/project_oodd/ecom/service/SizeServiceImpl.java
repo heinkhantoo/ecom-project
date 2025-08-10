@@ -29,18 +29,18 @@ public class SizeServiceImpl implements SizeService {
         return Size;
     }
 
-    public SizeDTO createSize(SizeDTO dto) {
+    public SizeDTO createSize(Size data) {
     	Size Size = new Size();
-        Size.setValue(dto.getValue());
+        Size.setValue(data.getValue());
         return convertToDTO(sizeRepository.save(Size));
     }
 
-    public SizeDTO updateSize(String id, SizeDTO dto) {
+    public SizeDTO updateSize(String id, Size data) {
 
         Size Size = sizeRepository.findByValueIgnoreCase(id)
                 .orElseThrow(() -> new AppException("Size not found with this id", 404));
 
-        if (dto.getValue() != null) Size.setValue(dto.getValue());
+        if (data.getValue() != null) Size.setValue(data.getValue());
 
         return convertToDTO(sizeRepository.save(Size));
     }

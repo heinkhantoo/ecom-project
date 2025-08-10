@@ -22,33 +22,33 @@ public class CategoryServiceImpl implements CategoryService {
         return convertToDTO(categoryRespository.findAll());
     }
 
-    public CategoryDTO getCategoryById(String id) {
-        CategoryDTO cat = convertToDTO(categoryRespository.findByCategoryCodeIgnoreCase(id)
+    public CategoryDTO getCategoryById(String code) {
+        CategoryDTO cat = convertToDTO(categoryRespository.findByCategoryCodeIgnoreCase(code)
                 .orElseThrow(() -> new AppException("Category not found with this id", 404)));
         
         return cat;
     }
 
-    public CategoryDTO createCategory(CategoryDTO dto) {
+    public CategoryDTO createCategory(Category data) {
     	Category cat = new Category();
-        cat.setCategoryName(dto.getCategoryName());
-        cat.setCategoryCode(dto.getCategoryCode());
+        cat.setCategoryName(data.getCategoryName());
+        cat.setCategoryCode(data.getCategoryCode());
         return convertToDTO(categoryRespository.save(cat));
     }
 
-    public CategoryDTO updateCategory(String id, CategoryDTO dto) {
+    public CategoryDTO updateCategory(String code, Category data) {
 
-    	Category cat = categoryRespository.findByCategoryCodeIgnoreCase(id)
+    	Category cat = categoryRespository.findByCategoryCodeIgnoreCase(code)
                 .orElseThrow(() -> new AppException("Category not found with this id", 404));
         
-        if (dto.getCategoryCode() != null) cat.setCategoryCode(dto.getCategoryCode());
-        if (dto.getCategoryName() != null) cat.setCategoryName(dto.getCategoryName());
+        if (data.getCategoryCode() != null) cat.setCategoryCode(data.getCategoryCode());
+        if (data.getCategoryName() != null) cat.setCategoryName(data.getCategoryName());
 
         return convertToDTO(categoryRespository.save(cat));
     }
 
-    public void deleteCategory(String id) {
-        Category cat = categoryRespository.findByCategoryCodeIgnoreCase(id)
+    public void deleteCategory(String code) {
+        Category cat = categoryRespository.findByCategoryCodeIgnoreCase(code)
                 .orElseThrow(() -> new AppException("Category not found with this id", 404));
         categoryRespository.delete(cat);
     }

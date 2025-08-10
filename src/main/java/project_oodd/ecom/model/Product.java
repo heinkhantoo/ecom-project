@@ -57,10 +57,6 @@ public class Product {
 			this.price = 0.0;
 		if (stock == null)
 			this.stock = 0;
-		if (productCode == null)
-			this.productCode = "";
-		if (productName == null)
-			this.productName = "";
 		if (img == null)
 			this.img = "";
 	}

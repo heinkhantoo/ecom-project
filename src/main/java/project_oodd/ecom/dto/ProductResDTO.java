@@ -2,10 +2,7 @@ package project_oodd.ecom.dto;
 
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class ProductDTO {
+public class ProductResDTO {
 
 	private String productCode;
 	private String productName;
@@ -16,18 +13,22 @@ public class ProductDTO {
 	private String subCategory;
 	private Set<String> sizes;
 	private Set<String> colors;
-	
-	public ProductDTO() {
-		setDefault();
+
+	public ProductResDTO() {
+		defaultValues();
 	}
-	
-	private void setDefault() {
-		this.price = 0.0;
-		this.stock = 0;
-		this.img = "";
-		this.category = "";
-		this.subCategory = "";
-		
+
+	private void defaultValues() {
+		if (category == null)
+			this.category = "";
+		if (subCategory == null)
+			this.subCategory = "";
+		if (img == null)
+			this.img = "";
+		if (stock == null)
+			this.stock = 0;
+		if (price == null)
+			this.price = 0.0;
 	}
 
 	public String getProductCode() {

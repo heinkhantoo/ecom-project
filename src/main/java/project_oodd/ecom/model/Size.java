@@ -12,7 +12,7 @@ public class Size {
 	@Column(name = "id")
 	private Long sid;
 
-	@Column(length = 20, unique = true)
+	@Column(length = 20, unique = true, nullable = false)
 	private String value;
 
 	private LocalDateTime createdDate;
@@ -25,8 +25,6 @@ public class Size {
 	public void onCreate() {
 		this.createdDate = LocalDateTime.now();
 		this.modifiedDate = LocalDateTime.now();
-		if (value == null)
-			this.value = "";
 	}
 
 	@PreUpdate
