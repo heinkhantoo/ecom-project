@@ -69,10 +69,10 @@ public class AuthController {
 		cookie.setMaxAge(5);
 		cookie.setPath("/");
 		res.addCookie(cookie);
+		
+		Map<String, Object> data = Map.of("token", "loggedout", "message", "You have successfully logout");
 
-		System.out.println(res.toString());
-
-		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", "You have successfully logout");
+		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
 		return ResponseEntity.ok(response);
 	}
 }

@@ -23,9 +23,9 @@ public class FilterRegistration {
                 .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                 .anyRequest().authenticated()
             )
-        .exceptionHandling(ex -> ex.authenticationEntryPoint(customAuthEntryPoint))
         .csrf(csrf -> csrf.disable())
-            .addFilterBefore(auth, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(auth, UsernamePasswordAuthenticationFilter.class)
+            .exceptionHandling(ex -> ex.authenticationEntryPoint(customAuthEntryPoint));
 
         return http.build();
     }

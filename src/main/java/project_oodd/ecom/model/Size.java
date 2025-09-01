@@ -3,7 +3,6 @@ package project_oodd.ecom.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 public class Size {
@@ -17,9 +16,6 @@ public class Size {
 
 	private LocalDateTime createdDate;
 	private LocalDateTime modifiedDate;
-
-	@ManyToMany(mappedBy = "sizes")
-	private Set<Product> products;
 
 	@PrePersist
 	public void onCreate() {
@@ -46,14 +42,6 @@ public class Size {
 
 	public void setValue(String value) {
 		this.value = value;
-	}
-
-	public Set<Product> getProducts() {
-		return products;
-	}
-
-	public void setProducts(Set<Product> products) {
-		this.products = products;
 	}
 
 	public LocalDateTime getCreatedDate() {

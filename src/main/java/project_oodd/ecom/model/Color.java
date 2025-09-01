@@ -1,7 +1,6 @@
 package project_oodd.ecom.model;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 import jakarta.persistence.*;
 
@@ -21,9 +20,6 @@ public class Color {
 
 	private LocalDateTime createdDate;
 	private LocalDateTime modifiedDate;
-	
-	@ManyToMany(mappedBy = "colors")
-    private Set<Product> products;
 
 	@PrePersist
 	public void onCreate() {
@@ -75,14 +71,5 @@ public class Color {
 	public void setModifiedDate(LocalDateTime modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
-
-	public Set<Product> getProducts() {
-		return products;
-	}
-
-	public void setProducts(Set<Product> products) {
-		this.products = products;
-	}
-	
 
 }

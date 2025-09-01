@@ -1,7 +1,6 @@
-package project_oodd.ecom.model;
+ package project_oodd.ecom.model;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 import jakarta.persistence.*;
 
@@ -15,14 +14,13 @@ public class Product {
 
 	@Column(length = 50, name = "code", nullable = false, unique = true)
 	private String productCode;
-	
+
 	@Column(length = 150, name = "name", nullable = false)
 	private String productName;
-	
+
 	private LocalDateTime createdDate;
 	private LocalDateTime modifiedDate;
 	private Double price;
-	private Integer stock;
 	private String img;
 
 	@ManyToOne(optional = true, fetch = FetchType.LAZY)
@@ -32,22 +30,6 @@ public class Product {
 	@ManyToOne(optional = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "sub_category_id")
 	private SubCategory subCategory;
-	
-	@ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "product_color",
-        joinColumns = @JoinColumn(name = "product_id"),
-        inverseJoinColumns = @JoinColumn(name = "color_id")
-    )
-    private Set<Color> colors;
-	
-	@ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "product_size",
-        joinColumns = @JoinColumn(name = "product_id"),
-        inverseJoinColumns = @JoinColumn(name = "size_id")
-    )
-    private Set<Size> sizes;
 
 	@PrePersist
 	public void onCreate() {
@@ -55,8 +37,6 @@ public class Product {
 		this.modifiedDate = LocalDateTime.now();
 		if (price == null)
 			this.price = 0.0;
-		if (stock == null)
-			this.stock = 0;
 		if (img == null)
 			this.img = "";
 	}
@@ -114,14 +94,6 @@ public class Product {
 		this.price = price;
 	}
 
-	public Integer getStock() {
-		return stock;
-	}
-
-	public void setStock(Integer stock) {
-		this.stock = stock;
-	}
-
 	public String getImg() {
 		return img;
 	}
@@ -145,22 +117,4 @@ public class Product {
 	public void setSubCategory(SubCategory subCategory) {
 		this.subCategory = subCategory;
 	}
-
-	public Set<Color> getColors() {
-		return colors;
-	}
-
-	public void setColors(Set<Color> colors) {
-		this.colors = colors;
-	}
-
-	public Set<Size> getSizes() {
-		return sizes;
-	}
-
-	public void setSizes(Set<Size> sizes) {
-		this.sizes = sizes;
-	}
-	
-	
 }

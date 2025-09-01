@@ -35,8 +35,9 @@ public class Authentication extends OncePerRequestFilter {
 		// Check Header
 		String authHeader = request.getHeader("Authorization");
 		System.out.println(authHeader);
-		if (authHeader != null && authHeader.startsWith("Bearer")) {
+		if (authHeader != null && authHeader.startsWith("Bearer ")) {
 			token = authHeader.substring(7);
+			System.out.print(token);
 		}
 
 		if (token == null && request.getCookies() != null) {
@@ -46,6 +47,7 @@ public class Authentication extends OncePerRequestFilter {
 				}
 			}
 		}
+		
 
 		if (token != null && jwt.isTokenValid(token)) {
 			String userCode = jwt.getUserCode(token);

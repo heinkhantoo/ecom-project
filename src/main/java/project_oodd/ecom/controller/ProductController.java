@@ -14,6 +14,7 @@ import project_oodd.ecom.util.ApiResponse;
 import project_oodd.ecom.util.Role;
 import project_oodd.ecom.dto.ProductReqDTO;
 import project_oodd.ecom.dto.ProductResDTO;
+import project_oodd.ecom.dto.VariantDTO;
 import project_oodd.ecom.model.User;
 import project_oodd.ecom.security.RoleRestriction;
 
@@ -26,11 +27,22 @@ public class ProductController {
 
 	@GetMapping
 	public ResponseEntity<ApiResponse<Map<String, Object>>> getAll() {
-		
+
 		List<ProductResDTO> products = productService.getProducts();
 		Map<String, Object> data = Map.of("data", products);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", products.size(), data);
+
+		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping("/variants")
+	public ResponseEntity<ApiResponse<Map<String, Object>>> getAllVariants() {
+
+		List<VariantDTO> variants = productService.getVariants();
+		Map<String, Object> data = Map.of("data", variants);
+
+		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", variants.size(), data);
 
 		return ResponseEntity.ok(response);
 	}
@@ -45,11 +57,21 @@ public class ProductController {
 		return ResponseEntity.ok(response);
 	}
 
+	@GetMapping("/variant/{id}")
+	public ResponseEntity<ApiResponse<Map<String, Object>>> getPVariantById(@PathVariable String id) {
+
+		VariantDTO variant = productService.getVariantById(id);
+		Map<String, Object> data = Map.of("data", variant);
+
+		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
+		return ResponseEntity.ok(response);
+	}
+
 	@PostMapping
 	public ResponseEntity<ApiResponse<Map<String, Object>>> createProduct(@AuthenticationPrincipal User user,
 			@RequestBody ProductReqDTO body) {
 
-		RoleRestriction.restrictTo(user, Role.ADMIN,Role.MANAGER,Role.ASSISTANT);
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER, Role.ASSISTANT);
 
 		ProductResDTO product = productService.createProduct(body);
 		Map<String, Object> data = Map.of("data", product);
@@ -58,12 +80,25 @@ public class ProductController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
+	@PostMapping("/{productCode}/variants")
+	public ResponseEntity<ApiResponse<Map<String, Object>>> createVariant(@AuthenticationPrincipal User user,
+			@PathVariable String productCode, @RequestBody VariantDTO body) {
+
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER, Role.ASSISTANT);
+
+		VariantDTO variant = productService.createVariant(productCode, body);
+		Map<String, Object> data = Map.of("data", variant);
+
+		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	}
+
 	@PatchMapping("/{id}")
 	public ResponseEntity<ApiResponse<Map<String, Object>>> updateProduct(@AuthenticationPrincipal User user,
 			@PathVariable String id, @RequestBody ProductReqDTO body) {
-		
-		RoleRestriction.restrictTo(user, Role.ADMIN,Role.MANAGER,Role.ASSISTANT);
-		
+
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER, Role.ASSISTANT);
+
 		ProductResDTO product = productService.updateProduct(id, body);
 		Map<String, Object> data = Map.of("data", product);
 
@@ -71,12 +106,34 @@ public class ProductController {
 		return ResponseEntity.ok(response);
 	}
 
+	@PatchMapping("/{productCode}/variants/{id}")
+	public ResponseEntity<ApiResponse<Map<String, Object>>> updateProduct(@AuthenticationPrincipal User user,
+			@PathVariable String productCode, @PathVariable String id, @RequestBody VariantDTO body) {
+
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER, Role.ASSISTANT);
+
+		VariantDTO variant = productService.updateVariant(productCode, id, body);
+		Map<String, Object> data = Map.of("data", variant);
+
+		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
+		return ResponseEntity.ok(response);
+	}
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteProduct(@AuthenticationPrincipal User user, @PathVariable String id) {
-		
-		RoleRestriction.restrictTo(user, Role.ADMIN,Role.MANAGER,Role.ASSISTANT);
-		
+
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER, Role.ASSISTANT);
+
 		productService.deleteProduct(id);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+
+	@DeleteMapping("/variants/{id}")
+	public ResponseEntity<Void> deleteVariant(@AuthenticationPrincipal User user, @PathVariable String id) {
+
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER, Role.ASSISTANT);
+
+		productService.deleteVariant(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
