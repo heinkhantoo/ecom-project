@@ -2,6 +2,7 @@ package project_oodd.ecom.service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,8 @@ public class SizeServiceImpl implements SizeService {
         return convertToDTO(sizeRepository.findAll());
     }
 
-    public SizeDTO getSizeById(String id) {
-        SizeDTO Size = convertToDTO(sizeRepository.findByValueIgnoreCase(id)
+    public SizeDTO getSizeById(UUID id) {
+        SizeDTO Size = convertToDTO(sizeRepository.findById(id)
                 .orElseThrow(() -> new AppException("Size not found with this id", 404)));
         
         return Size;
@@ -35,9 +36,9 @@ public class SizeServiceImpl implements SizeService {
         return convertToDTO(sizeRepository.save(Size));
     }
 
-    public SizeDTO updateSize(String id, Size data) {
+    public SizeDTO updateSize(UUID id, Size data) {
 
-        Size Size = sizeRepository.findByValueIgnoreCase(id)
+        Size Size = sizeRepository.findById(id)
                 .orElseThrow(() -> new AppException("Size not found with this id", 404));
 
         if (data.getValue() != null) Size.setValue(data.getValue());
@@ -45,14 +46,15 @@ public class SizeServiceImpl implements SizeService {
         return convertToDTO(sizeRepository.save(Size));
     }
 
-    public void deleteSize(String id) {
-        Size Size = sizeRepository.findByValueIgnoreCase(id)
+    public void deleteSize(UUID id) {
+        Size Size = sizeRepository.findById(id)
                 .orElseThrow(() -> new AppException("Size not found with this id", 404));
         sizeRepository.delete(Size);
     }
     
     public SizeDTO convertToDTO(Size size) {
         SizeDTO dto = new SizeDTO();
+        dto.setSid(size.getSid());
         dto.setValue(size.getValue());
 
         return dto;

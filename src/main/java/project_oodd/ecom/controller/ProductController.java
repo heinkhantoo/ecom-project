@@ -2,19 +2,23 @@ package project_oodd.ecom.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import project_oodd.ecom.service.ProductService;
 import project_oodd.ecom.util.ApiResponse;
+import project_oodd.ecom.util.FileStorageService;
 import project_oodd.ecom.util.Role;
 import project_oodd.ecom.dto.ProductReqDTO;
 import project_oodd.ecom.dto.ProductResDTO;
-import project_oodd.ecom.dto.VariantDTO;
+import project_oodd.ecom.dto.VariantReqDTO;
+import project_oodd.ecom.dto.VariantResDTO;
 import project_oodd.ecom.model.User;
 import project_oodd.ecom.security.RoleRestriction;
 
@@ -24,6 +28,9 @@ public class ProductController {
 
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private FileStorageService fileStorageService;
 
 	@GetMapping
 	public ResponseEntity<ApiResponse<Map<String, Object>>> getAll() {
@@ -39,7 +46,7 @@ public class ProductController {
 	@GetMapping("/variants")
 	public ResponseEntity<ApiResponse<Map<String, Object>>> getAllVariants() {
 
-		List<VariantDTO> variants = productService.getVariants();
+		List<VariantResDTO> variants = productService.getVariants();
 		Map<String, Object> data = Map.of("data", variants);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", variants.size(), data);
@@ -48,7 +55,7 @@ public class ProductController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> getProductById(@PathVariable String id) {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> getProductById(@PathVariable UUID id) {
 
 		ProductResDTO product = productService.getProductById(id);
 		Map<String, Object> data = Map.of("data", product);
@@ -57,22 +64,27 @@ public class ProductController {
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping("/variant/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> getPVariantById(@PathVariable String id) {
+	@GetMapping("/variants/{id}")
+	public ResponseEntity<ApiResponse<Map<String, Object>>> getVariantById(@PathVariable UUID id) {
 
-		VariantDTO variant = productService.getVariantById(id);
+		VariantResDTO variant = productService.getVariantById(id);
 		Map<String, Object> data = Map.of("data", variant);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
 		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping
+	@PostMapping(consumes = { "multipart/form-data" })
 	public ResponseEntity<ApiResponse<Map<String, Object>>> createProduct(@AuthenticationPrincipal User user,
-			@RequestBody ProductReqDTO body) {
+			@RequestPart(value = "product", required = false) ProductReqDTO body,
+			@RequestPart(value = "image", required = false) MultipartFile imageFile) {
 
 		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER, Role.ASSISTANT);
 
+		if (imageFile != null && !imageFile.isEmpty()) {
+	        String imageUrl = fileStorageService.storeFile(imageFile); // service to save file in "uploads/"
+	        body.setImg(imageUrl); // set URL in DTO
+	    }
 		ProductResDTO product = productService.createProduct(body);
 		Map<String, Object> data = Map.of("data", product);
 
@@ -80,13 +92,13 @@ public class ProductController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
-	@PostMapping("/{productCode}/variants")
+	@PostMapping("/{pid}/variants")
 	public ResponseEntity<ApiResponse<Map<String, Object>>> createVariant(@AuthenticationPrincipal User user,
-			@PathVariable String productCode, @RequestBody VariantDTO body) {
+			@PathVariable UUID pid, @RequestBody VariantReqDTO body) {
 
 		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER, Role.ASSISTANT);
 
-		VariantDTO variant = productService.createVariant(productCode, body);
+		VariantResDTO variant = productService.createVariant(pid, body);
 		Map<String, Object> data = Map.of("data", variant);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -95,7 +107,7 @@ public class ProductController {
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<ApiResponse<Map<String, Object>>> updateProduct(@AuthenticationPrincipal User user,
-			@PathVariable String id, @RequestBody ProductReqDTO body) {
+			@PathVariable UUID id, @RequestBody ProductReqDTO body) {
 
 		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER, Role.ASSISTANT);
 
@@ -106,13 +118,13 @@ public class ProductController {
 		return ResponseEntity.ok(response);
 	}
 
-	@PatchMapping("/{productCode}/variants/{id}")
+	@PatchMapping("/{pid}/variants/{id}")
 	public ResponseEntity<ApiResponse<Map<String, Object>>> updateProduct(@AuthenticationPrincipal User user,
-			@PathVariable String productCode, @PathVariable String id, @RequestBody VariantDTO body) {
+			@PathVariable UUID id, @RequestBody VariantReqDTO body) {
 
 		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER, Role.ASSISTANT);
 
-		VariantDTO variant = productService.updateVariant(productCode, id, body);
+		VariantResDTO variant = productService.updateVariant(id, body);
 		Map<String, Object> data = Map.of("data", variant);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -120,7 +132,7 @@ public class ProductController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteProduct(@AuthenticationPrincipal User user, @PathVariable String id) {
+	public ResponseEntity<Void> deleteProduct(@AuthenticationPrincipal User user, @PathVariable UUID id) {
 
 		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER, Role.ASSISTANT);
 
@@ -129,7 +141,7 @@ public class ProductController {
 	}
 
 	@DeleteMapping("/variants/{id}")
-	public ResponseEntity<Void> deleteVariant(@AuthenticationPrincipal User user, @PathVariable String id) {
+	public ResponseEntity<Void> deleteVariant(@AuthenticationPrincipal User user, @PathVariable UUID id) {
 
 		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER, Role.ASSISTANT);
 

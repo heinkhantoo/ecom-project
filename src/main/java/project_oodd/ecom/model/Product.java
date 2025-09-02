@@ -1,6 +1,7 @@
  package project_oodd.ecom.model;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import jakarta.persistence.*;
 
@@ -8,12 +9,12 @@ import jakarta.persistence.*;
 public class Product {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(name = "id")
-	private long pid;
+	private UUID pid;
 
-	@Column(length = 50, name = "code", nullable = false, unique = true)
-	private String productCode;
+//	@Column(length = 50, name = "code", nullable = false, unique = true)
+//	private String productCode;
 
 	@Column(length = 150, name = "name", nullable = false)
 	private String productName;
@@ -23,9 +24,9 @@ public class Product {
 	private Double price;
 	private String img;
 
-	@ManyToOne(optional = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "category_id")
-	private Category category;
+//	@ManyToOne(optional = true, fetch = FetchType.LAZY)
+//	@JoinColumn(name = "category_id")
+//	private Category category;
 
 	@ManyToOne(optional = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "sub_category_id")
@@ -46,21 +47,21 @@ public class Product {
 		this.modifiedDate = LocalDateTime.now();
 	}
 
-	public long getPid() {
+	public UUID getPid() {
 		return pid;
 	}
 
-	public void setPid(long pid) {
+	public void setPid(UUID pid) {
 		this.pid = pid;
 	}
 
-	public String getProductCode() {
-		return productCode;
-	}
-
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
-	}
+//	public String getProductCode() {
+//		return productCode;
+//	}
+//
+//	public void setProductCode(String productCode) {
+//		this.productCode = productCode;
+//	}
 
 	public String getProductName() {
 		return productName;
@@ -102,13 +103,13 @@ public class Product {
 		this.img = img;
 	}
 
-	public Category getCategory() {
-		return category;
-	}
-
-	public void setCategory(Category category) {
-		this.category = category;
-	}
+//	public Category getCategory() {
+//		return category;
+//	}
+//
+//	public void setCategory(Category category) {
+//		this.category = category;
+//	}
 
 	public SubCategory getSubCategory() {
 		return subCategory;

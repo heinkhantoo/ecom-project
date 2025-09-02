@@ -2,6 +2,7 @@ package project_oodd.ecom.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,7 +38,7 @@ public class ColorController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> getColorById(@AuthenticationPrincipal User user, @PathVariable String id) {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> getColorById(@AuthenticationPrincipal User user, @PathVariable UUID id) {
 
 		ColorDTO color = colorService.getColorById(id);
 		Map<String, Object> data = Map.of("data", color);
@@ -59,7 +60,7 @@ public class ColorController {
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> updateColor(@AuthenticationPrincipal User user, @PathVariable String id,
+	public ResponseEntity<ApiResponse<Map<String, Object>>> updateColor(@AuthenticationPrincipal User user, @PathVariable UUID id,
 			@RequestBody Color body) {
 
 		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
@@ -72,7 +73,7 @@ public class ColorController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteProduct(@AuthenticationPrincipal User user, @PathVariable String id) {
+	public ResponseEntity<Void> deleteProduct(@AuthenticationPrincipal User user, @PathVariable UUID id) {
 
 		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
 		

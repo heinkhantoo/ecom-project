@@ -20,9 +20,9 @@ public class Jwt {
     @Value("${jwt.expiration}")
     private long jwtExpirationMs;
 
-    public String generateToken(String code) {
+    public String generateToken(String email) {
         return Jwts.builder()
-                .setSubject(code)
+                .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes()), SignatureAlgorithm.HS256)
@@ -46,7 +46,7 @@ public class Jwt {
         }
     }
 
-    public String getUserCode(String token) {
+    public String getUser(String token) {
         return getClaims(token).getSubject();
     }
 }

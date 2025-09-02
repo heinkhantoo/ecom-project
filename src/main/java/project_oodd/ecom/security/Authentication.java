@@ -34,10 +34,10 @@ public class Authentication extends OncePerRequestFilter {
 
 		// Check Header
 		String authHeader = request.getHeader("Authorization");
-		System.out.println(authHeader);
+//		System.out.println(authHeader);
 		if (authHeader != null && authHeader.startsWith("Bearer ")) {
 			token = authHeader.substring(7);
-			System.out.print(token);
+//			System.out.print(token);
 		}
 
 		if (token == null && request.getCookies() != null) {
@@ -50,8 +50,8 @@ public class Authentication extends OncePerRequestFilter {
 		
 
 		if (token != null && jwt.isTokenValid(token)) {
-			String userCode = jwt.getUserCode(token);
-			User user = userRepository.findByUserCodeIgnoreCase(userCode)
+			String userEmail = jwt.getUser(token);
+			User user = userRepository.findByEmailIgnoreCase(userEmail)
 					.orElseThrow(() -> new AppException("User doesn't exist", 404));
 			if (user != null) {
 				UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null,

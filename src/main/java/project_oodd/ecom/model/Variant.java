@@ -1,6 +1,7 @@
 package project_oodd.ecom.model;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import jakarta.persistence.*;
 
@@ -10,8 +11,9 @@ import jakarta.persistence.*;
 public class Variant {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	@Column(name = "id")
+	private UUID vid;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "product_id", nullable = false)
@@ -24,8 +26,6 @@ public class Variant {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "size_id", nullable = false)
 	private Size size;
-
-	private String sku;
 
 	private Integer stock;
 
@@ -50,12 +50,12 @@ public class Variant {
 		this.modifiedDate = LocalDateTime.now();
 	}
 
-	public Long getId() {
-		return id;
+	public UUID getVid() {
+		return vid;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setViId(UUID vid) {
+		this.vid = vid;
 	}
 
 	public Product getProduct() {
@@ -82,13 +82,13 @@ public class Variant {
 		this.size = size;
 	}
 
-	public String getSku() {
-		return sku;
-	}
-
-	public void setSku(String sku) {
-		this.sku = sku;
-	}
+//	public String getSku() {
+//		return sku;
+//	}
+//
+//	public void setSku(String sku) {
+//		this.sku = sku;
+//	}
 
 	public Integer getStock() {
 		return stock;

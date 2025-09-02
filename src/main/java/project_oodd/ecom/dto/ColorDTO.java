@@ -1,15 +1,34 @@
 package project_oodd.ecom.dto;
 
-public class ColorDTO {
-	private String colorCode;
-	private String colorDescription;
+import java.util.UUID;
 
-	public String getColorCode() {
-		return colorCode;
+public class ColorDTO {
+	private UUID cid;
+	private String colorDescription;
+	private String hex;
+
+//	public String getColorCode() {
+//		return colorCode;
+//	}
+//
+//	public void setColorCode(String colorCode) {
+//		this.colorCode = colorCode;
+//	}
+
+	public UUID getCid() {
+		return cid;
 	}
 
-	public void setColorCode(String colorCode) {
-		this.colorCode = colorCode;
+	public void setCid(UUID cid) {
+		this.cid = cid;
+	}
+
+	public String getHex() {
+		return hex;
+	}
+
+	public void setHex(String hex) {
+		this.hex = hex;
 	}
 
 	public String getColorDescription() {

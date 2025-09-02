@@ -2,6 +2,7 @@ package project_oodd.ecom.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,7 +46,7 @@ public class CategoryController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> getCategoryById(@AuthenticationPrincipal User user, @PathVariable String id) {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> getCategoryById(@AuthenticationPrincipal User user, @PathVariable UUID id) {
 
 		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
 		
@@ -69,7 +70,7 @@ public class CategoryController {
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> updatecategory(@AuthenticationPrincipal User user, @PathVariable String id,
+	public ResponseEntity<ApiResponse<Map<String, Object>>> updatecategory(@AuthenticationPrincipal User user, @PathVariable UUID id,
 			@RequestBody Category body) {
 		
 		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
@@ -82,7 +83,7 @@ public class CategoryController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteProduct(@AuthenticationPrincipal User user, @PathVariable String id) {
+	public ResponseEntity<Void> deleteProduct(@AuthenticationPrincipal User user, @PathVariable UUID id) {
 		
 		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
 		

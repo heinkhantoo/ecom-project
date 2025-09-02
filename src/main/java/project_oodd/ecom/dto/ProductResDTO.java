@@ -1,24 +1,25 @@
 package project_oodd.ecom.dto;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class ProductResDTO {
 
-	private String productCode;
+//	private String productCode;
+	private UUID pid;
 	private String productName;
 	private Double price;
 	private String img;
-	private String category;
 	private String subCategory;
-	private List<VariantDTO> variants;
+	private LocalDateTime createdDate;
 
 	public ProductResDTO() {
 		defaultValues();
 	}
 
 	private void defaultValues() {
-		if (category == null)
-			this.category = "";
+//		if (category == null)
+//			this.category = "";
 		if (subCategory == null)
 			this.subCategory = "";
 		if (img == null)
@@ -27,16 +28,24 @@ public class ProductResDTO {
 			this.price = 0.0;
 	}
 
-	public String getProductCode() {
-		return productCode;
-	}
-
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
-	}
+//	public String getProductCode() {
+//		return productCode;
+//	}
+//
+//	public void setProductCode(String productCode) {
+//		this.productCode = productCode;
+//	}
 
 	public String getProductName() {
 		return productName;
+	}
+
+	public UUID getPid() {
+		return pid;
+	}
+
+	public void setPid(UUID pid) {
+		this.pid = pid;
 	}
 
 	public void setProductName(String productName) {
@@ -59,13 +68,13 @@ public class ProductResDTO {
 		this.img = img;
 	}
 
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
+//	public String getCategory() {
+//		return category;
+//	}
+//
+//	public void setCategory(String category) {
+//		this.category = category;
+//	}
 
 	public String getSubCategory() {
 		return subCategory;
@@ -75,13 +84,22 @@ public class ProductResDTO {
 		this.subCategory = subCategory;
 	}
 
-	public List<VariantDTO> getVariants() {
-		return variants;
+	public LocalDateTime getCreatedDate() {
+		return createdDate;
 	}
 
-	public void setVariants(List<VariantDTO> variants) {
-		this.variants = variants;
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
 	}
 	
 	
+
+//	public List<VariantDTO> getVariants() {
+//		return variants;
+//	}
+//
+//	public void setVariants(List<VariantDTO> variants) {
+//		this.variants = variants;
+//	}
+
 }

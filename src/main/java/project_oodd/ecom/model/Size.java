@@ -3,13 +3,14 @@ package project_oodd.ecom.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 public class Size {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(name = "id")
-	private Long sid;
+	private UUID sid;
 
 	@Column(length = 20, unique = true, nullable = false)
 	private String value;
@@ -28,11 +29,11 @@ public class Size {
 		this.modifiedDate = LocalDateTime.now();
 	}
 
-	public Long getSid() {
+	public UUID getSid() {
 		return sid;
 	}
 
-	public void setSid(Long id) {
+	public void setSid(UUID id) {
 		this.sid = id;
 	}
 

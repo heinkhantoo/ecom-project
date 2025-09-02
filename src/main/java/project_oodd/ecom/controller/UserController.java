@@ -2,6 +2,7 @@ package project_oodd.ecom.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,7 +38,8 @@ public class UserController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> getUserByEmail(@AuthenticationPrincipal User user, @PathVariable String id) {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> getUserByEmail(@AuthenticationPrincipal User user,
+			@PathVariable UUID id) {
 		RoleRestriction.restrictTo(user, Role.ADMIN);
 		UserDTO u = userService.getUserById(id);
 		Map<String, Object> data = Map.of("data", u);
@@ -47,7 +49,8 @@ public class UserController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<Map<String, Object>>> createUser(@AuthenticationPrincipal User user,@Valid @RequestBody User body) {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> createUser(@AuthenticationPrincipal User user,
+			@Valid @RequestBody User body) {
 		RoleRestriction.restrictTo(user, Role.ADMIN);
 		if (!body.passwordMatch()) {
 			throw new AppException("Passwords do not match", 401);
@@ -58,24 +61,25 @@ public class UserController {
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
-	
+
 	@PatchMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> updateUser(@AuthenticationPrincipal User user, @PathVariable String id, @RequestBody User body){
-		
+	public ResponseEntity<ApiResponse<Map<String, Object>>> updateUser(@AuthenticationPrincipal User user,
+			@PathVariable UUID id, @RequestBody User body) {
+
 		RoleRestriction.restrictTo(user, Role.ADMIN);
-		
+
 		UserDTO u = userService.updateUser(id, body);
 		Map<String, Object> data = Map.of("data", u);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
 		return ResponseEntity.ok(response);
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal User user, @PathVariable String id){
-		
+	public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal User user, @PathVariable UUID id) {
+
 		RoleRestriction.restrictTo(user, Role.ADMIN);
-		
+
 		userService.deleteUser(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}

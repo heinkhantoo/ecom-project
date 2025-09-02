@@ -36,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
 
 	public UserDTO convertToDTO(User user) {
 		UserDTO dto = new UserDTO();
-		dto.setUserCode(user.getUserCode());
+		dto.setUid(user.getUid());
 		dto.setEmail(user.getEmail());
 		dto.setName(user.getName());
 		dto.setPhno(user.getPhno());

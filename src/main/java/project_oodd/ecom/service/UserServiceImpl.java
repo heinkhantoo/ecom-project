@@ -2,6 +2,7 @@ package project_oodd.ecom.service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,8 @@ public class UserServiceImpl implements UserService {
 		return convertToDTO(user);
 	}
 
-	public UserDTO getUserById(String code) {
-		User user = userRepository.findByUserCodeIgnoreCase(code)
+	public UserDTO getUserById(UUID id) {
+		User user = userRepository.findById(id)
 				.orElseThrow(() -> new AppException("User doesn't exist!", 404));
 		return convertToDTO(user);
 	}
@@ -41,8 +42,8 @@ public class UserServiceImpl implements UserService {
 		return convertToDTO(userRepository.save(user));
 	}
 
-	public UserDTO updateUser(String code, User data) {
-		User user = userRepository.findByUserCodeIgnoreCase(code)
+	public UserDTO updateUser(UUID id, User data) {
+		User user = userRepository.findById(id)
 				.orElseThrow(() -> new AppException("User doesn't exist!", 404));
 		if (data.getEmail() != null)
 			user.setEmail(data.getEmail());
@@ -56,14 +57,15 @@ public class UserServiceImpl implements UserService {
 		return convertToDTO(userRepository.save(user));
 	}
 	
-	public void deleteUser(String code) {
-		User user = userRepository.findByUserCodeIgnoreCase(code).orElseThrow(() -> new AppException("User doesn't exist!", 404));
+	public void deleteUser(UUID id) {
+		User user = userRepository.findById(id).orElseThrow(() -> new AppException("User doesn't exist!", 404));
 		userRepository.delete(user);
 	}
 
 	public UserDTO convertToDTO(User user) {
 		UserDTO dto = new UserDTO();
-		dto.setUserCode(user.getUserCode());
+		dto.setUid(user.getUid());
+//		dto.setUserCode(user.getUserCode());
 		dto.setEmail(user.getEmail());
 		dto.setName(user.getName());
 		dto.setPhno(user.getPhno());

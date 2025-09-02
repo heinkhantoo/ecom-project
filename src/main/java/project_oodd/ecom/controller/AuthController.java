@@ -48,7 +48,7 @@ public class AuthController {
 		String password = body.getPassword();
 
 		UserDTO user = authService.login(email, password);
-		String token = jwt.generateToken(user.getUserCode());
+		String token = jwt.generateToken(user.getEmail());
 
 		Cookie cookie = new Cookie("jwt", token);
 		cookie.setHttpOnly(true);

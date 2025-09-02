@@ -13,12 +13,12 @@ import project_oodd.ecom.util.Role;
 public class User {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(name = "id")
-	private long uid;
+	private UUID uid;
 	
-	@Column(name = "code", length = 36)
-	private String userCode;
+//	@Column(name = "code", length = 36)
+//	private String userCode;
 
 	@Column(length = 100, nullable = false)
 	private String name;
@@ -30,7 +30,7 @@ public class User {
 	private String phno;
 
 	@Column(nullable = false)
-	@Size(min = 8, message = "Password must be at least 8 characters long!")
+	@Size(min = 8, message = "Password must be at least 8 characters UUID!")
 	private String password;
 
 	@Transient
@@ -54,7 +54,7 @@ public class User {
 
 	@PrePersist
 	public void onCreate() {
-		this.userCode = UUID.randomUUID().toString().replace("-", "");
+//		this.userCode = UUID.randomUUID().toString().replace("-", "");
 		if (phno == null)
 			this.phno = "";
 		if (role == null) this.role = Role.USER;
@@ -70,21 +70,21 @@ public class User {
 		this.modifiedDate = LocalDateTime.now();
 	}
 
-	public long getUid() {
+	public UUID getUid() {
 		return uid;
 	}
 
-	public void setUid(long uid) {
+	public void setUid(UUID uid) {
 		this.uid = uid;
 	}
 
-	public String getUserCode() {
-		return userCode;
-	}
-
-	public void setUserCode(String userCode) {
-		this.userCode = userCode;
-	}
+//	public String getUserCode() {
+//		return userCode;
+//	}
+//
+//	public void setUserCode(String userCode) {
+//		this.userCode = userCode;
+//	}
 
 	public String getName() {
 		return name;

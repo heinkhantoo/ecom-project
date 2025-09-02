@@ -1,21 +1,32 @@
 package project_oodd.ecom.dto;
 
+import java.util.UUID;
+
 import project_oodd.ecom.util.Role;
 
 public class UserDTO {
-	private String userCode;
+//	private String userCode;
+	private UUID uid;
 	private String email;
 	private String name;
 	private String phno;
 	private boolean active;
 	private Role role;
 
-	public String getUserCode() {
-		return userCode;
+//	public String getUserCode() {
+//		return userCode;
+//	}
+//
+//	public void setUserCode(String userCode) {
+//		this.userCode = userCode;
+//	}
+
+	public UUID getUid() {
+		return uid;
 	}
 
-	public void setUserCode(String userCode) {
-		this.userCode = userCode;
+	public void setUid(UUID uid) {
+		this.uid = uid;
 	}
 
 	public boolean isActive() {

@@ -2,6 +2,7 @@ package project_oodd.ecom.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,7 +45,7 @@ public class SizeController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> getColorById(@AuthenticationPrincipal User user, @PathVariable String id) {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> getColorById(@AuthenticationPrincipal User user, @PathVariable UUID id) {
 
 		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
 		
@@ -68,7 +69,7 @@ public class SizeController {
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> updateColor(@AuthenticationPrincipal User user, @PathVariable String id,
+	public ResponseEntity<ApiResponse<Map<String, Object>>> updateColor(@AuthenticationPrincipal User user, @PathVariable UUID id,
 			@RequestBody Size body) {
 
 		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
@@ -81,7 +82,7 @@ public class SizeController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteProduct(@AuthenticationPrincipal User user, @PathVariable String id) {
+	public ResponseEntity<Void> deleteProduct(@AuthenticationPrincipal User user, @PathVariable UUID id) {
 
 		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
 		

@@ -2,6 +2,7 @@ package project_oodd.ecom.service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,8 @@ public class CategoryServiceImpl implements CategoryService {
         return convertToDTO(categoryRespository.findAll());
     }
 
-    public CategoryDTO getCategoryById(String code) {
-        CategoryDTO cat = convertToDTO(categoryRespository.findByCategoryCodeIgnoreCase(code)
+    public CategoryDTO getCategoryById(UUID id) {
+        CategoryDTO cat = convertToDTO(categoryRespository.findById(id)
                 .orElseThrow(() -> new AppException("Category not found with this id", 404)));
         
         return cat;
@@ -32,30 +33,28 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDTO createCategory(Category data) {
     	Category cat = new Category();
         cat.setCategoryName(data.getCategoryName());
-        cat.setCategoryCode(data.getCategoryCode());
+//        cat.setCategoryCode(data.getCategoryCode());
         return convertToDTO(categoryRespository.save(cat));
     }
 
-    public CategoryDTO updateCategory(String code, Category data) {
+    public CategoryDTO updateCategory(UUID id, Category data) {
 
-    	Category cat = categoryRespository.findByCategoryCodeIgnoreCase(code)
+    	Category cat = categoryRespository.findById(id)
                 .orElseThrow(() -> new AppException("Category not found with this id", 404));
-        
-        if (data.getCategoryCode() != null) cat.setCategoryCode(data.getCategoryCode());
         if (data.getCategoryName() != null) cat.setCategoryName(data.getCategoryName());
 
         return convertToDTO(categoryRespository.save(cat));
     }
 
-    public void deleteCategory(String code) {
-        Category cat = categoryRespository.findByCategoryCodeIgnoreCase(code)
+    public void deleteCategory(UUID id) {
+        Category cat = categoryRespository.findById(id)
                 .orElseThrow(() -> new AppException("Category not found with this id", 404));
         categoryRespository.delete(cat);
     }
     
     public CategoryDTO convertToDTO(Category cat) {
     	CategoryDTO dto = new CategoryDTO();
-        dto.setCategoryCode(cat.getCategoryCode());
+    	dto.setCid(cat.getCid());
         dto.setCategoryName(cat.getCategoryName());
 
         return dto;
