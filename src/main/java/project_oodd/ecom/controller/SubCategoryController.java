@@ -2,10 +2,12 @@ package project_oodd.ecom.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -15,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import project_oodd.ecom.dto.SubCategoryDTO;
+import project_oodd.ecom.dto.SubCategoryReqDTO;
+import project_oodd.ecom.dto.SubCategoryResDTO;
+import project_oodd.ecom.model.User;
+import project_oodd.ecom.security.RoleRestriction;
 import project_oodd.ecom.service.SubCategoryService;
 import project_oodd.ecom.util.ApiResponse;
-
-
+import project_oodd.ecom.util.Role;
 
 @RestController
 @RequestMapping("/api/subcategory")
@@ -28,8 +32,11 @@ public class SubCategoryController {
 	private SubCategoryService subCategoryService;
 
 	@GetMapping
-	public ResponseEntity<ApiResponse<Map<String, Object>>> getAll() {
-		List<SubCategoryDTO> subcategory = subCategoryService.getSubCategory();
+	public ResponseEntity<ApiResponse<Map<String, Object>>> getAll(@AuthenticationPrincipal User user) {
+
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+
+		List<SubCategoryResDTO> subcategory = subCategoryService.getSubCategory();
 		Map<String, Object> data = Map.of("data", subcategory);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", subcategory.size(), data);
@@ -38,9 +45,12 @@ public class SubCategoryController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> getSubCategoryById(@PathVariable String id) {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> getSubCategoryById(@AuthenticationPrincipal User user,
+			@PathVariable UUID id) {
 
-		SubCategoryDTO subcategory = subCategoryService.getSubCategoryById(id);
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+
+		SubCategoryResDTO subcategory = subCategoryService.getSubCategoryById(id);
 		Map<String, Object> data = Map.of("data", subcategory);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -48,9 +58,12 @@ public class SubCategoryController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<Map<String, Object>>> createcategory(@RequestBody SubCategoryDTO dto) {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> createcategory(@AuthenticationPrincipal User user,
+			@RequestBody SubCategoryReqDTO body) {
 
-		SubCategoryDTO subCategory = subCategoryService.createSubCategory(dto);
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+
+		SubCategoryResDTO subCategory = subCategoryService.createSubCategory(body);
 		Map<String, Object> data = Map.of("data", subCategory);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -58,9 +71,12 @@ public class SubCategoryController {
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> updatecategory(@PathVariable String id,
-			@RequestBody SubCategoryDTO dto) {
-		SubCategoryDTO category = subCategoryService.updateSubCategory(id, dto);
+	public ResponseEntity<ApiResponse<Map<String, Object>>> updatecategory(@AuthenticationPrincipal User user,
+			@PathVariable UUID id, @RequestBody SubCategoryReqDTO body) {
+
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+
+		SubCategoryResDTO category = subCategoryService.updateSubCategory(id, body);
 		Map<String, Object> data = Map.of("data", category);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -68,7 +84,9 @@ public class SubCategoryController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
+	public ResponseEntity<Void> deleteProduct(@AuthenticationPrincipal User user, @PathVariable UUID id) {
+
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
 		subCategoryService.deleteSubCategory(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}

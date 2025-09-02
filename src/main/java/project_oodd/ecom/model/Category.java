@@ -1,6 +1,7 @@
 package project_oodd.ecom.model;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import jakarta.persistence.*;
 
@@ -8,12 +9,12 @@ import jakarta.persistence.*;
 public class Category {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(name = "id")
-	private long cid;
+	private UUID cid;
 
-	@Column(name = "code", length = 50, unique = true, nullable = false)
-	private String categoryCode;
+//	@Column(name = "code", length = 50, unique = true, nullable = false)
+//	private String categoryCode;
 
 	@Column(name = "name", length = 150, nullable = false)
 	private String categoryName;
@@ -25,10 +26,6 @@ public class Category {
 	public void onCreate() {
 		this.createdDate = LocalDateTime.now();
 		this.modifiedDate = LocalDateTime.now();
-		if (categoryCode != null)
-			this.categoryCode = "";
-		if (categoryName != null)
-			this.categoryName = "";
 	}
 
 	@PreUpdate
@@ -36,21 +33,21 @@ public class Category {
 		this.modifiedDate = LocalDateTime.now();
 	}
 
-	public long getCid() {
+	public UUID getCid() {
 		return cid;
 	}
 
-	public void setCid(long cid) {
+	public void setCid(UUID cid) {
 		this.cid = cid;
 	}
 
-	public String getCategoryCode() {
-		return categoryCode;
-	}
-
-	public void setCategoryCode(String categoryCode) {
-		this.categoryCode = categoryCode;
-	}
+//	public String getCategoryCode() {
+//		return categoryCode;
+//	}
+//
+//	public void setCategoryCode(String categoryCode) {
+//		this.categoryCode = categoryCode;
+//	}
 
 	public String getCategoryName() {
 		return categoryName;

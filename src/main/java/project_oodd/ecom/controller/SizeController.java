@@ -2,10 +2,12 @@ package project_oodd.ecom.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -16,8 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import project_oodd.ecom.dto.SizeDTO;
+import project_oodd.ecom.model.Size;
+import project_oodd.ecom.model.User;
+import project_oodd.ecom.security.RoleRestriction;
 import project_oodd.ecom.service.SizeService;
 import project_oodd.ecom.util.ApiResponse;
+import project_oodd.ecom.util.Role;
 
 @RestController
 @RequestMapping("/api/sizes")
@@ -26,7 +32,10 @@ public class SizeController {
 	private SizeService sizeService;
 
 	@GetMapping
-	public ResponseEntity<ApiResponse<Map<String, Object>>> getAll() {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> getAll(@AuthenticationPrincipal User user) {
+
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		
 		List<SizeDTO> colors = sizeService.getSizes();
 		Map<String, Object> data = Map.of("data", colors);
 
@@ -36,8 +45,10 @@ public class SizeController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> getColorById(@PathVariable String id) {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> getColorById(@AuthenticationPrincipal User user, @PathVariable UUID id) {
 
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		
 		SizeDTO color = sizeService.getSizeById(id);
 		Map<String, Object> data = Map.of("data", color);
 
@@ -46,9 +57,11 @@ public class SizeController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<Map<String, Object>>> createColor(@RequestBody SizeDTO dto) {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> createColor(@AuthenticationPrincipal User user, @RequestBody Size body) {
 
-		SizeDTO color = sizeService.createSize(dto);
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		
+		SizeDTO color = sizeService.createSize(body);
 		Map<String, Object> data = Map.of("data", color);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -56,9 +69,12 @@ public class SizeController {
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> updateColor(@PathVariable String id,
-			@RequestBody SizeDTO dto) {
-		SizeDTO color = sizeService.updateSize(id, dto);
+	public ResponseEntity<ApiResponse<Map<String, Object>>> updateColor(@AuthenticationPrincipal User user, @PathVariable UUID id,
+			@RequestBody Size body) {
+
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		
+		SizeDTO color = sizeService.updateSize(id, body);
 		Map<String, Object> data = Map.of("data", color);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -66,7 +82,10 @@ public class SizeController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
+	public ResponseEntity<Void> deleteProduct(@AuthenticationPrincipal User user, @PathVariable UUID id) {
+
+		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		
 		sizeService.deleteSize(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}

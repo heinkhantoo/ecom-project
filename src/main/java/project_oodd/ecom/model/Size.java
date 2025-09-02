@@ -3,30 +3,25 @@ package project_oodd.ecom.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.UUID;
 
 @Entity
 public class Size {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(name = "id")
-	private Long sid;
+	private UUID sid;
 
-	@Column(length = 20, unique = true)
+	@Column(length = 20, unique = true, nullable = false)
 	private String value;
 
 	private LocalDateTime createdDate;
 	private LocalDateTime modifiedDate;
 
-	@ManyToMany(mappedBy = "sizes")
-	private Set<Product> products;
-
 	@PrePersist
 	public void onCreate() {
 		this.createdDate = LocalDateTime.now();
 		this.modifiedDate = LocalDateTime.now();
-		if (value == null)
-			this.value = "";
 	}
 
 	@PreUpdate
@@ -34,11 +29,11 @@ public class Size {
 		this.modifiedDate = LocalDateTime.now();
 	}
 
-	public Long getSid() {
+	public UUID getSid() {
 		return sid;
 	}
 
-	public void setSid(Long id) {
+	public void setSid(UUID id) {
 		this.sid = id;
 	}
 
@@ -48,14 +43,6 @@ public class Size {
 
 	public void setValue(String value) {
 		this.value = value;
-	}
-
-	public Set<Product> getProducts() {
-		return products;
-	}
-
-	public void setProducts(Set<Product> products) {
-		this.products = products;
 	}
 
 	public LocalDateTime getCreatedDate() {

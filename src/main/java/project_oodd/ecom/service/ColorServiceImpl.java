@@ -2,6 +2,7 @@ package project_oodd.ecom.service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,58 +16,57 @@ import project_oodd.ecom.repository.ColorRepository;
 @Service
 public class ColorServiceImpl implements ColorService {
 	@Autowired
-    private ColorRepository colorRepository;
-	
+	private ColorRepository colorRepository;
+
 	public List<ColorDTO> getColors() {
-        return convertToDTO(colorRepository.findAll());
-    }
+		return convertToDTO(colorRepository.findAll());
+	}
 
-    public ColorDTO getColorById(String id) {
-        ColorDTO color = convertToDTO(colorRepository.findByColorCodeIgnoreCase(id)
-                .orElseThrow(() -> new AppException("Color not found with this id", 404)));
-        
-        return color;
-    }
+	public ColorDTO getColorById(UUID id) {
+		ColorDTO color = convertToDTO(
+				colorRepository.findById(id).orElseThrow(() -> new AppException("Color not found with this id", 404)));
 
-    public ColorDTO createColor(ColorDTO dto) {
-    	Color color = new Color();
-        color.setColorCode(dto.getColorCode());
-        color.setColorDescription(dto.getColorDescription());
-        return convertToDTO(colorRepository.save(color));
-    }
+		return color;
+	}
 
-    public ColorDTO updateColor(String id, ColorDTO dto) {
+	public ColorDTO createColor(Color data) {
+		Color color = new Color();
+		color.setColorDescription(data.getColorDescription());
+		color.setHex(data.getHex());
+		return convertToDTO(colorRepository.save(color));
+	}
 
-        Color color = colorRepository.findByColorCodeIgnoreCase(id)
-                .orElseThrow(() -> new AppException("Color not found with this id", 404));
-        
-        if (dto.getColorCode() != null) color.setColorCode(dto.getColorCode());
-        if (dto.getColorDescription() != null) color.setColorDescription(dto.getColorDescription());
+	public ColorDTO updateColor(UUID id, Color data) {
 
-        return convertToDTO(colorRepository.save(color));
-    }
+		Color color = colorRepository.findById(id)
+				.orElseThrow(() -> new AppException("Color not found with this id", 404));
+		if (data.getColorDescription() != null)
+			color.setColorDescription(data.getColorDescription());
+		if (data.getHex() != null)
+			color.setHex(data.getHex());
 
-    public void deleteColor(String id) {
-        Color color = colorRepository.findByColorCodeIgnoreCase(id)
-                .orElseThrow(() -> new AppException("Color not found with this id", 404));
-        colorRepository.delete(color);
-    }
-    
-    public ColorDTO convertToDTO(Color color) {
-        ColorDTO dto = new ColorDTO();
-        dto.setColorCode(color.getColorCode());
-        dto.setColorDescription(color.getColorDescription());
+		return convertToDTO(colorRepository.save(color));
+	}
 
-        return dto;
-    }
-    
-    public List<ColorDTO> convertToDTO(List<Color> colors) {
-        if (colors == null || colors.isEmpty()) {
-            return Collections.emptyList();
-        }
+	public void deleteColor(UUID id) {
+		Color color = colorRepository.findById(id)
+				.orElseThrow(() -> new AppException("Color not found with this id", 404));
+		colorRepository.delete(color);
+	}
 
-        return colors.stream()
-            .map(this::convertToDTO)
-            .collect(Collectors.toList());
-    }
+	public ColorDTO convertToDTO(Color color) {
+		ColorDTO dto = new ColorDTO();
+		dto.setCid(color.getCid());
+		dto.setColorDescription(color.getColorDescription());
+		dto.setHex(color.getHex());
+		return dto;
+	}
+
+	public List<ColorDTO> convertToDTO(List<Color> colors) {
+		if (colors == null || colors.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		return colors.stream().map(this::convertToDTO).collect(Collectors.toList());
+	}
 }
