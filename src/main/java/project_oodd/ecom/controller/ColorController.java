@@ -27,7 +27,7 @@ public class ColorController {
 	@GetMapping
 	public ResponseEntity<ApiResponse<Map<String, Object>>> getAll(@AuthenticationPrincipal User user) {
 
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 		
 		List<ColorDTO> colors = colorService.getColors();
 		Map<String, Object> data = Map.of("data", colors);
@@ -50,7 +50,7 @@ public class ColorController {
 	@PostMapping
 	public ResponseEntity<ApiResponse<Map<String, Object>>> createColor(@AuthenticationPrincipal User user, @RequestBody Color body) {
 
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 		
 		ColorDTO color = colorService.createColor(body);
 		Map<String, Object> data = Map.of("data", color);
@@ -63,7 +63,7 @@ public class ColorController {
 	public ResponseEntity<ApiResponse<Map<String, Object>>> updateColor(@AuthenticationPrincipal User user, @PathVariable UUID id,
 			@RequestBody Color body) {
 
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 		
 		ColorDTO color = colorService.updateColor(id, body);
 		Map<String, Object> data = Map.of("data", color);
@@ -75,7 +75,7 @@ public class ColorController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteProduct(@AuthenticationPrincipal User user, @PathVariable UUID id) {
 
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 		
 		colorService.deleteColor(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

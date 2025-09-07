@@ -30,7 +30,7 @@ public class User {
 	private String phno;
 
 	@Column(nullable = false)
-	@Size(min = 8, message = "Password must be at least 8 characters UUID!")
+	@Size(min = 8, message = "Password must be at least 8 characters!")
 	private String password;
 
 	@Transient

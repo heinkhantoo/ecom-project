@@ -35,7 +35,7 @@ public class CategoryController {
 	@GetMapping
 	public ResponseEntity<ApiResponse<Map<String, Object>>> getAll(@AuthenticationPrincipal User user) {
 		
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 		
 		List<CategoryDTO> category = categoryService.getCategory();
 		Map<String, Object> data = Map.of("data", category);
@@ -48,7 +48,7 @@ public class CategoryController {
 	@GetMapping("/{id}")
 	public ResponseEntity<ApiResponse<Map<String, Object>>> getCategoryById(@AuthenticationPrincipal User user, @PathVariable UUID id) {
 
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 		
 		CategoryDTO category = categoryService.getCategoryById(id);
 		Map<String, Object> data = Map.of("data", category);
@@ -60,7 +60,7 @@ public class CategoryController {
 	@PostMapping
 	public ResponseEntity<ApiResponse<Map<String, Object>>> createcategory(@AuthenticationPrincipal User user, @RequestBody Category body) {
 
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 		
 		CategoryDTO category = categoryService.createCategory(body);
 		Map<String, Object> data = Map.of("data", category);
@@ -73,7 +73,7 @@ public class CategoryController {
 	public ResponseEntity<ApiResponse<Map<String, Object>>> updatecategory(@AuthenticationPrincipal User user, @PathVariable UUID id,
 			@RequestBody Category body) {
 		
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 		
 		CategoryDTO category = categoryService.updateCategory(id, body);
 		Map<String, Object> data = Map.of("data", category);
@@ -85,7 +85,7 @@ public class CategoryController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteProduct(@AuthenticationPrincipal User user, @PathVariable UUID id) {
 		
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 		
 		categoryService.deleteCategory(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

@@ -16,7 +16,7 @@ public class SubCategory {
 //	@Column(name = "code", length = 50, unique = true, nullable = false)
 //	private String subCategoryCode;
 
-	@Column(name = "name", length = 150, nullable = false)
+	@Column(name = "name", unique = true, length = 150, nullable = false)
 	private String subCategoryName;
 
 	@ManyToOne(optional = true, fetch = FetchType.LAZY)

@@ -16,7 +16,7 @@ public class Color {
 //	@Column(name = "code", length = 50, unique = true, nullable = false)
 //	private String colorCode;
 
-	@Column(name = "description", length = 50, nullable = false)
+	@Column(name = "description", unique = true,  length = 50, nullable = false)
 	private String colorDescription;
 
 	@Column(name = "hex", length = 25)

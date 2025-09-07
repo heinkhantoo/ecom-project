@@ -29,4 +29,17 @@ public class FileStorageService {
             throw new RuntimeException("Failed to store file: " + e.getMessage(), e);
         }
     }
+    
+    public void deleteFile(String fileUrl) {
+        try {
+            if (fileUrl == null) return;
+
+            String fileName = fileUrl.replace("/uploads/", "");
+            Path filePath = Paths.get(UPLOAD_DIR, fileName);
+
+            Files.deleteIfExists(filePath);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete file: " + e.getMessage(), e);
+        }
+    }
 }

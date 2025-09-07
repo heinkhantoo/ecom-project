@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import project_oodd.ecom.service.ProductService;
 import project_oodd.ecom.util.ApiResponse;
-import project_oodd.ecom.util.FileStorageService;
 import project_oodd.ecom.util.Role;
 import project_oodd.ecom.dto.ProductReqDTO;
 import project_oodd.ecom.dto.ProductResDTO;
@@ -28,9 +27,6 @@ public class ProductController {
 
 	@Autowired
 	private ProductService productService;
-	
-	@Autowired
-	private FileStorageService fileStorageService;
 
 	@GetMapping
 	public ResponseEntity<ApiResponse<Map<String, Object>>> getAll() {
@@ -74,18 +70,15 @@ public class ProductController {
 		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping(consumes = { "multipart/form-data" })
+	@PostMapping
 	public ResponseEntity<ApiResponse<Map<String, Object>>> createProduct(@AuthenticationPrincipal User user,
-			@RequestPart(value = "product", required = false) ProductReqDTO body,
-			@RequestPart(value = "image", required = false) MultipartFile imageFile) {
+			@RequestPart(value = "product") ProductReqDTO body,
+			@RequestPart(value = "image", required = false) MultipartFile imageFile,
+			@RequestPart(value = "variantImgs", required = false) List<MultipartFile> vImageFiles) {
 
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER, Role.ASSISTANT);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 
-		if (imageFile != null && !imageFile.isEmpty()) {
-	        String imageUrl = fileStorageService.storeFile(imageFile); // service to save file in "uploads/"
-	        body.setImg(imageUrl); // set URL in DTO
-	    }
-		ProductResDTO product = productService.createProduct(body);
+		ProductResDTO product = productService.createProduct(body, imageFile, vImageFiles);
 		Map<String, Object> data = Map.of("data", product);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -94,11 +87,12 @@ public class ProductController {
 
 	@PostMapping("/{pid}/variants")
 	public ResponseEntity<ApiResponse<Map<String, Object>>> createVariant(@AuthenticationPrincipal User user,
-			@PathVariable UUID pid, @RequestBody VariantReqDTO body) {
+			@PathVariable UUID pid, @RequestPart(value = "variant") VariantReqDTO body,
+			@RequestPart(value = "image", required = false) MultipartFile imageFile) {
 
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER, Role.ASSISTANT);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 
-		VariantResDTO variant = productService.createVariant(pid, body);
+		VariantResDTO variant = productService.createVariant(pid, body, imageFile);
 		Map<String, Object> data = Map.of("data", variant);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -107,11 +101,12 @@ public class ProductController {
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<ApiResponse<Map<String, Object>>> updateProduct(@AuthenticationPrincipal User user,
-			@PathVariable UUID id, @RequestBody ProductReqDTO body) {
+			@PathVariable UUID id, @RequestPart(value = "product", required = false) ProductReqDTO body,
+			@RequestPart(value = "image", required = false) MultipartFile imageFile) {
 
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER, Role.ASSISTANT);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 
-		ProductResDTO product = productService.updateProduct(id, body);
+		ProductResDTO product = productService.updateProduct(id, body, imageFile);
 		Map<String, Object> data = Map.of("data", product);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -119,12 +114,13 @@ public class ProductController {
 	}
 
 	@PatchMapping("/{pid}/variants/{id}")
-	public ResponseEntity<ApiResponse<Map<String, Object>>> updateProduct(@AuthenticationPrincipal User user,
-			@PathVariable UUID id, @RequestBody VariantReqDTO body) {
+	public ResponseEntity<ApiResponse<Map<String, Object>>> updateVariant(@AuthenticationPrincipal User user,
+			@PathVariable UUID pid, @PathVariable UUID id, @RequestPart(value = "variant", required = false) VariantReqDTO body,
+			@RequestPart(value = "image", required = false) MultipartFile imageFile) {
 
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER, Role.ASSISTANT);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 
-		VariantResDTO variant = productService.updateVariant(id, body);
+		VariantResDTO variant = productService.updateVariant(pid, id, body, imageFile);
 		Map<String, Object> data = Map.of("data", variant);
 
 		ApiResponse<Map<String, Object>> response = new ApiResponse<>("success", data);
@@ -134,7 +130,7 @@ public class ProductController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteProduct(@AuthenticationPrincipal User user, @PathVariable UUID id) {
 
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER, Role.ASSISTANT);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 
 		productService.deleteProduct(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -143,7 +139,7 @@ public class ProductController {
 	@DeleteMapping("/variants/{id}")
 	public ResponseEntity<Void> deleteVariant(@AuthenticationPrincipal User user, @PathVariable UUID id) {
 
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER, Role.ASSISTANT);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 
 		productService.deleteVariant(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

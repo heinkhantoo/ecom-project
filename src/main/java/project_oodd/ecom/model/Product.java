@@ -1,4 +1,4 @@
- package project_oodd.ecom.model;
+package project_oodd.ecom.model;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -16,7 +16,7 @@ public class Product {
 //	@Column(length = 50, name = "code", nullable = false, unique = true)
 //	private String productCode;
 
-	@Column(length = 150, name = "name", nullable = false)
+	@Column(length = 150, name = "name", unique = true, nullable = false)
 	private String productName;
 
 	private LocalDateTime createdDate;

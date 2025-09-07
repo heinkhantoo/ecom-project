@@ -10,6 +10,7 @@ public class VariantReqDTO {
 //	private String sku;
 	private Integer stock;
 	private String imageUrl;
+	private String imageName;
 
 //	public UUID getVid() {
 //		return vid;
@@ -66,5 +67,14 @@ public class VariantReqDTO {
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}
+
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
+	}
+
+	public String getImageName() {
+		return imageName;
+	}
+
 
 }

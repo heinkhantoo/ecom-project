@@ -16,7 +16,7 @@ public class Category {
 //	@Column(name = "code", length = 50, unique = true, nullable = false)
 //	private String categoryCode;
 
-	@Column(name = "name", length = 150, nullable = false)
+	@Column(name = "name", unique = true, length = 150, nullable = false)
 	private String categoryName;
 
 	private LocalDateTime createdDate;

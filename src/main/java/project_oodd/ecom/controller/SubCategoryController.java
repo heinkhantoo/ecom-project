@@ -34,7 +34,7 @@ public class SubCategoryController {
 	@GetMapping
 	public ResponseEntity<ApiResponse<Map<String, Object>>> getAll(@AuthenticationPrincipal User user) {
 
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 
 		List<SubCategoryResDTO> subcategory = subCategoryService.getSubCategory();
 		Map<String, Object> data = Map.of("data", subcategory);
@@ -48,7 +48,7 @@ public class SubCategoryController {
 	public ResponseEntity<ApiResponse<Map<String, Object>>> getSubCategoryById(@AuthenticationPrincipal User user,
 			@PathVariable UUID id) {
 
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 
 		SubCategoryResDTO subcategory = subCategoryService.getSubCategoryById(id);
 		Map<String, Object> data = Map.of("data", subcategory);
@@ -61,7 +61,7 @@ public class SubCategoryController {
 	public ResponseEntity<ApiResponse<Map<String, Object>>> createcategory(@AuthenticationPrincipal User user,
 			@RequestBody SubCategoryReqDTO body) {
 
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 
 		SubCategoryResDTO subCategory = subCategoryService.createSubCategory(body);
 		Map<String, Object> data = Map.of("data", subCategory);
@@ -74,7 +74,7 @@ public class SubCategoryController {
 	public ResponseEntity<ApiResponse<Map<String, Object>>> updatecategory(@AuthenticationPrincipal User user,
 			@PathVariable UUID id, @RequestBody SubCategoryReqDTO body) {
 
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 
 		SubCategoryResDTO category = subCategoryService.updateSubCategory(id, body);
 		Map<String, Object> data = Map.of("data", category);
@@ -86,7 +86,7 @@ public class SubCategoryController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteProduct(@AuthenticationPrincipal User user, @PathVariable UUID id) {
 
-		RoleRestriction.restrictTo(user, Role.ADMIN, Role.MANAGER);
+		RoleRestriction.restrictTo(user, Role.ADMIN);
 		subCategoryService.deleteSubCategory(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
