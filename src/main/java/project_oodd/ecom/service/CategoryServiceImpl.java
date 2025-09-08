@@ -17,56 +17,56 @@ import project_oodd.ecom.repository.CategoryRepository;
 public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
-    private CategoryRepository categoryRespository;
-	
+	private CategoryRepository categoryRespository;
+
 	public List<CategoryDTO> getCategory() {
-        return convertToDTO(categoryRespository.findAll());
-    }
+		return convertToDTO(categoryRespository.findAll());
+	}
 
-    public CategoryDTO getCategoryById(UUID id) {
-        CategoryDTO cat = convertToDTO(categoryRespository.findById(id)
-                .orElseThrow(() -> new AppException("Category not found with this id", 404)));
-        
-        return cat;
-    }
+	public CategoryDTO getCategoryById(UUID id) {
+		CategoryDTO cat = convertToDTO(categoryRespository.findById(id)
+				.orElseThrow(() -> new AppException("Category not found with this id", 404)));
 
-    public CategoryDTO createCategory(Category data) {
-    	Category cat = new Category();
-        cat.setCategoryName(data.getCategoryName());
+		return cat;
+	}
+
+	public CategoryDTO createCategory(Category data) {
+		Category cat = new Category();
+		cat.setCategoryName(data.getCategoryName());
 //        cat.setCategoryCode(data.getCategoryCode());
-        return convertToDTO(categoryRespository.save(cat));
-    }
+		return convertToDTO(categoryRespository.save(cat));
+	}
 
-    public CategoryDTO updateCategory(UUID id, Category data) {
+	public CategoryDTO updateCategory(UUID id, Category data) {
 
-    	Category cat = categoryRespository.findById(id)
-                .orElseThrow(() -> new AppException("Category not found with this id", 404));
-        if (data.getCategoryName() != null) cat.setCategoryName(data.getCategoryName());
+		Category cat = categoryRespository.findById(id)
+				.orElseThrow(() -> new AppException("Category not found with this id", 404));
+		if (data.getCategoryName() != null)
+			cat.setCategoryName(data.getCategoryName());
 
-        return convertToDTO(categoryRespository.save(cat));
-    }
+		return convertToDTO(categoryRespository.save(cat));
+	}
 
-    public void deleteCategory(UUID id) {
-        Category cat = categoryRespository.findById(id)
-                .orElseThrow(() -> new AppException("Category not found with this id", 404));
-        categoryRespository.delete(cat);
-    }
-    
-    public CategoryDTO convertToDTO(Category cat) {
-    	CategoryDTO dto = new CategoryDTO();
-    	dto.setCid(cat.getCid());
-        dto.setCategoryName(cat.getCategoryName());
+	public void deleteCategory(UUID id) {
+		Category cat = categoryRespository.findById(id)
+				.orElseThrow(() -> new AppException("Category not found with this id", 404));
+		categoryRespository.delete(cat);
+	}
 
-        return dto;
-    }
-    
-    public List<CategoryDTO> convertToDTO(List<Category> cats) {
-        if (cats == null || cats.isEmpty()) {
-            return Collections.emptyList();
-        }
+	public CategoryDTO convertToDTO(Category cat) {
+		CategoryDTO dto = new CategoryDTO();
+		dto.setCid(cat.getCid());
+		dto.setCategoryName(cat.getCategoryName());
 
-        return cats.stream()
-            .map(this::convertToDTO)
-            .collect(Collectors.toList());
-    }
+		return dto;
+	}
+
+	public List<CategoryDTO> convertToDTO(List<Category> cats) {
+		if (cats == null || cats.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		return cats.stream().map(this::convertToDTO).collect(Collectors.toList());
+	}
+
 }

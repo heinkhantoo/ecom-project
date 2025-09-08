@@ -58,6 +58,7 @@ public class ProductServiceImpl implements ProductService {
 	public ProductResDTO createProduct(ProductReqDTO data, MultipartFile imageFile, List<MultipartFile> vImageFiles) {
 		Product product = new Product();
 		product.setProductName(data.getProductName());
+		product.setPrice(data.getPrice());
 
 		if (imageFile != null && !imageFile.isEmpty()) {
 			String imageUrl = fileStorageService.storeFile(imageFile);
